@@ -5,11 +5,11 @@ const redisConnect = () => {
   if (URL) {
     try {
       return new Redis(URL);
-    } catch (err) {
+    } catch (err: any) {
       console.log(err.message);
     }
   } else {
-    throw new Error("Redis error : not get Url");
+    throw new Error("Redis error : not get redis Url");
   }
 };
 export { redisConnect };

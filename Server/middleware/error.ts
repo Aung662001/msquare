@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import ErrorHandler from "../utils/ErrorHandler";
-module.exports = (
+export const ErrorMiddleware = (
   err: any,
   req: Request,
   res: Response,
@@ -21,13 +21,18 @@ module.exports = (
   }
   //wrong jwt token
   if (err.name === "JsonWebTokenError") {
-    const message = `Josn Token is unvalid . Please try again`;
+    const message = `Josn Token is invalid . Please try again`;
     err = new ErrorHandler(message, 401);
   }
   //jwt expired error
   if (err.name === "TokenExpiredError") {
     const message = `Token has expired. Please login again`;
     err = new ErrorHandler(message, 401);
+  }
+  //too many requests error
+  if (err.name === "TooManyRequestsError") {
+    const message = `Too many requests. Please try again after sometime`;
+    err = new ErrorHandler(message, 429);
   }
   res.status(err.statusCode).json({
     success: false,

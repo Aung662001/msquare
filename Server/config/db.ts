@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const URL = process.env.MONGODB_URL;
+const URL = process.env.MONGODB_URL || "";
 
 const dbConnect = async () => {
   try {

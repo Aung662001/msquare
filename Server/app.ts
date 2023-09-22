@@ -1,8 +1,9 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 require("dotenv").config();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
+import { ErrorMiddleware } from "./middleware/error";
 
 export const app = express();
 
@@ -13,7 +14,11 @@ app.use(
     origin: ["http://localhost:5000"],
   })
 );
+app.get("/test", (req: Request, res: Response, next: NextFunction) => {
+  throw new Error("test error");
+});
 
+app.use(ErrorMiddleware);
 app.all("*", (req: Request, res: Response) => {
   res.status(403);
   if (req.accepts("html")) {
