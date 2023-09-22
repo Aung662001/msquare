@@ -5,6 +5,7 @@ import { catchAsyncErrors } from "../middleware/catchAsyncErrors";
 import jwt, { Secret } from "jsonwebtoken";
 import path from "path";
 import ejs from "ejs";
+import sendMail from "../utils/sendMail";
 interface User {
   name: string;
   email: string;
@@ -31,19 +32,33 @@ export const registerUser = catchAsyncErrors(
         password,
       };
       const { token, activationCode } = getActivationCode(user);
-      const data = { user: { naem: user.name }, activationCode };
+      const data = { user: { name: user.name }, activationCode };
       const html = await ejs.renderFile(
         path.join(__dirname, "..", "mails", "email.ejs"),
         data
       );
-    } catch (err) {}
+      const options = {
+        email: user.email,
+        subject: "Account Activation",
+        template: "email.ejs",
+        data: data,
+      };
+      try {
+        await sendMail(options);
+        res.status(200).json({
+          success: true,
+          message: "Please check your email to activate your account",
+          token,
+        });
+      } catch (err: any) {
+        return next(new ErrorHandler(err.message, 400));
+      }
+    } catch (err: any) {
+      return next(new ErrorHandler(err.message, 400));
+    }
   }
 );
 
-interface getActivationToken {
-  token: string;
-  activationCode: string;
-}
 export const getActivationCode = (user: User) => {
   const activationCode = Math.floor(1000 * Math.random());
   const token = jwt.sign(
