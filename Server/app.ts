@@ -3,8 +3,10 @@ require("dotenv").config();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
-import { ErrorMiddleware } from "./middleware/error";
 import registerRouter from "./routes/user.route";
+import ErrorHandler from "./utils/ErrorHandler";
+import { ErrorMiddleware } from "./middleware/error";
+import ejs from "ejs";
 
 export const app = express();
 
@@ -21,7 +23,7 @@ app.use(
 app.use("/api/v1", registerRouter);
 
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
-  throw new Error("test error");
+  res.send("Test Pass");
 });
 
 app.use(ErrorMiddleware);

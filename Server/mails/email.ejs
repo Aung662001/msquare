@@ -4,10 +4,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: "600px";
+        margin: auto;
+      }
+      h1 {
+        text-align: center;
+        background-color: aqua;
+      }
+      h2 {
+        text-align: center;
+      }
+      p {
+        text-align: center;
+        color: green;
+      }
+      span {
+        width: 100%;
+        text-align: center;
+        font-size: 3rem;
+        color: red;
+      }
+    </style>
   </head>
   <body>
+    <h1>Wellcome to MsquareProgramming</h1>
     <h2>Hello <% user.name %></h2>
     <p>Please Verify Your Email With the following code</p>
-    <p><%= activationCode %></p>
+    <span><%= activationCode %></span>
+    <p>This code is valid for next 5 minutes </br> 
+      I You want to know something please contact :msquareprogramming@gamil.com
+    </p>
   </body>
 </html>
