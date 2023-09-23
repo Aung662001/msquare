@@ -21,11 +21,15 @@
         text-align: center;
         color: green;
       }
-      span {
+       .code{
         width: 100%;
         text-align: center;
         font-size: 3rem;
         color: red;
+      }
+       .minute{
+        color :red;
+        font-size: 1.2rem;
       }
     </style>
   </head>
@@ -33,9 +37,9 @@
     <h1>Wellcome to MsquareProgramming</h1>
     <h2>Hello <% user.name %></h2>
     <p>Please Verify Your Email With the following code</p>
-    <span><%= activationCode %></span>
-    <p>This code is valid for next 5 minutes </br> 
-      I You want to know something please contact :msquareprogramming@gamil.com
+    <span class="code"><%= activationCode %></span>
+    <p>This code is valid for next <span class="minute">5 minutes</span> </br> 
+      If You want to know something please contact :msquareprogramming@gamil.com
     </p>
   </body>
 </html>

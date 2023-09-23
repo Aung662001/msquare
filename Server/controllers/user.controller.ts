@@ -73,31 +73,37 @@ interface activateUser {
   token: string;
   activationCode: string;
 }
-export const activateAccount = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { token, activationCode }: activateUser = req.body;
+export const activateAccount = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token, activationCode }: activateUser = req.body;
 
-  if (!token || !activationCode) throw new Error("Invalid activation code");
+    if (!token || !activationCode) throw new Error("Invalid activation code");
 
-  try {
-    const newUser = jwt.verify(token, process.env.jwt_SECRET as Secret) as {
-      user: User;
-      activationCode: string;
-    };
+    try {
+      const newUser = jwt.verify(token, process.env.JWT_SECRET as Secret) as {
+        user: User;
+        activationCode: string;
+      };
+      //activation code validation
+      if (newUser.activationCode !== activationCode) {
+        throw new Error("Invalid activation code");
+      }
+      const { name, email, password } = newUser.user;
+      //duplicate email check
+      const isExist = await userModel.findOne({ email });
+      if (isExist) {
+        throw new Error("Email already exists");
+      }
+      try {
+        //insert to database
+        const user = new userModel({ name, email, password }).save();
 
-    if (newUser.activationCode !== activationCode) {
-      throw new Error("Invalid activation code");
+        res.status(201).json({ success: true });
+      } catch (err: any) {
+        throw new Error(err.message);
+      }
+    } catch (err: any) {
+      throw new Error(err.message);
     }
-    const { name, email, password } = newUser.user;
-    //duplicate email check
-    const isExist = await userModel.findOne({ email });
-    if (isExist) {
-      throw new Error("Email already exists");
-    }
-  } catch (err: any) {
-    throw new Error(err.message);
   }
-};
+);
