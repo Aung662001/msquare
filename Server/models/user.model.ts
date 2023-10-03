@@ -1,9 +1,9 @@
 import mongoose, { Model, Schema } from "mongoose";
 import bcryptjs from "bcryptjs";
-
+import jwt from "jsonwebtoken";
 const emailRegexPattern: RegExp =
   /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-interface Iduser extends mongoose.Document {
+export interface Iduser extends mongoose.Document {
   name: string;
   email: string;
   password: string;
@@ -16,6 +16,8 @@ interface Iduser extends mongoose.Document {
   //   courses: { courseId: string }[];
   courses: Array<{ courseId: string }>;
   comparePassword: (password: string) => Promise<boolean>;
+  getAccessToken: () => string;
+  getRefreshToken: () => string;
 }
 const userSchema: Schema<Iduser> = new Schema(
   {
@@ -58,15 +60,35 @@ const userSchema: Schema<Iduser> = new Schema(
   },
   { timestamps: true }
 );
+//if user change password
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcryptjs.hash(this.password, 10);
   next();
 });
 
+//check if password is correct
 userSchema.methods.conparePassword = async function (
   password: string
 ): Promise<boolean> {
   return await bcryptjs.compare(password, this.password);
 };
 export const userModel: Model<Iduser> = mongoose.model("User", userSchema);
+// generate access token
+userSchema.methods.getAccessToken = function () {
+  const accessToken = jwt.sign(
+    { _id: this._id },
+    process.env.ACCESS_TOKEN || ""
+  );
+  return accessToken;
+};
+
+//generate refresh token
+
+userSchema.methods.getRefreshToken = async function () {
+  const refreshToken = jwt.sign(
+    { _id: this._id },
+    process.env.REFRESH_TOKEN || ""
+  );
+  return refreshToken;
+};

@@ -1,10 +1,9 @@
-import { NextFunction, Request, Response } from "express";
 import { app } from "./app";
 import { dbConnect } from "./config/db";
 
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
-  console.log("server is listen at port 3000");
+  console.log(`server is listen at port  http://localhost:${PORT}`);
   dbConnect();
 });

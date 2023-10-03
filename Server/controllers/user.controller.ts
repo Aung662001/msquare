@@ -6,6 +6,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import path from "path";
 import ejs from "ejs";
 import sendMail from "../utils/sendMail";
+import { sendToken } from "../utils/jwt";
 interface User {
   name: string;
   email: string;
@@ -68,7 +69,7 @@ export const getActivationCode = (user: User) => {
   );
   return { token, activationCode };
 };
-
+//activate new user and insert into database
 interface activateUser {
   token: string;
   activationCode: string;
@@ -86,13 +87,13 @@ export const activateAccount = catchAsyncErrors(
       };
       //activation code validation
       if (newUser.activationCode !== activationCode) {
-        throw new Error("Invalid activation code");
+        return next(new ErrorHandler("Invalid Activation code", 400));
       }
       const { name, email, password } = newUser.user;
       //duplicate email check
       const isExist = await userModel.findOne({ email });
       if (isExist) {
-        throw new Error("Email already exists");
+        return next(new ErrorHandler("Email already exist", 400));
       }
       try {
         //insert to database
@@ -100,10 +101,44 @@ export const activateAccount = catchAsyncErrors(
 
         res.status(201).json({ success: true });
       } catch (err: any) {
-        throw new Error(err.message);
+        return next(new ErrorHandler(err.message, 500));
       }
     } catch (err: any) {
-      throw new Error(err.message);
+      // throw new Error(err.message);// this method is work but status code is not included in the error object
+      //so the default in error handler is 500
+      return next(new ErrorHandler(err.message, 400));
+    }
+  }
+);
+//login user
+
+interface LoginUser {
+  password: string;
+  email: string;
+}
+export const loginUser = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password }: LoginUser = req.body;
+    //required data validation
+    if (!password || !email) {
+      return next(new ErrorHandler("Please provide all required fields", 400));
+    }
+    //retrieve user with email
+    try {
+      const user = await userModel.findOne({ email });
+      if (!user) {
+        throw new ErrorHandler("User not found", 400);
+      }
+      //compare password
+      const isPasswordMatched = user.comparePassword(password);
+      if (!isPasswordMatched) {
+        throw new ErrorHandler("User not found", 400);
+      }
+      //form jwt.ts
+      sendToken(user, 200, res);
+    } catch (err: any) {
+      console.log(err.message);
+      throw new ErrorHandler(err.message, 400);
     }
   }
 );

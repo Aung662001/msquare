@@ -4,9 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import registerRouter from "./routes/user.route";
-import ErrorHandler from "./utils/ErrorHandler";
 import { ErrorMiddleware } from "./middleware/error";
-import ejs from "ejs";
 
 export const app = express();
 
@@ -22,8 +20,12 @@ app.use(
 //regisger user route
 app.use("/api/v1", registerRouter);
 
-app.get("/test", (req: Request, res: Response, next: NextFunction) => {
-  res.send("Test Pass");
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+  if (req.accepts("html")) {
+    res.sendFile(path.join(__dirname, "views", "Test.html"));
+  } else {
+    res.json({ message: "Server is working" });
+  }
 });
 
 app.use(ErrorMiddleware);
@@ -32,5 +34,7 @@ app.all("*", (req: Request, res: Response) => {
   res.status(403);
   if (req.accepts("html")) {
     res.sendFile(path.join(__dirname, "views", "404.html"));
+  } else {
+    res.json({ message: "404 not found" });
   }
 });
