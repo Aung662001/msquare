@@ -1,5 +1,4 @@
 import { Response } from "express";
-import jwt from "jsonwebtoken";
 import { Iduser } from "../models/user.model";
 import { redis } from "./redis";
 interface CookieOptions {
@@ -18,17 +17,20 @@ const refreshCookieOption: CookieOptions = {
   httpOnly: true,
   sameSite: "lax",
 };
-export const sendToken = (user: Iduser, statusCode: number, res: Response) => {
+export const sendToken = async (
+  user: Iduser,
+  statusCode: number,
+  res: Response
+) => {
   const accessToken = user.getAccessToken();
   const refreshToken = user.getRefreshToken();
-
   //upload sessions to redis
   redis.set(user._id, JSON.stringify(user));
 
   res.cookie("access_token", accessToken, accessCookieOptions);
   res.cookie("refresh_token", refreshToken, refreshCookieOption);
 
-  res.send(statusCode).json({
+  res.status(statusCode).json({
     success: true,
     user: user,
     token: accessToken,

@@ -125,20 +125,33 @@ export const loginUser = catchAsyncErrors(
     }
     //retrieve user with email
     try {
-      const user = await userModel.findOne({ email });
+      const user = await userModel.findOne({ email }).select("+password");
       if (!user) {
         throw new ErrorHandler("User not found", 400);
       }
       //compare password
-      const isPasswordMatched = user.comparePassword(password);
+      const isPasswordMatched = await user.comparePassword(password as string);
       if (!isPasswordMatched) {
-        throw new ErrorHandler("User not found", 400);
+        throw new ErrorHandler("Password  not match", 400);
       }
+      console.log("password pass");
       //form jwt.ts
       sendToken(user, 200, res);
     } catch (err: any) {
       console.log(err.message);
       throw new ErrorHandler(err.message, 400);
     }
+  }
+);
+//logout route
+
+export const logoutUser = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
+    res.json({
+      success: true,
+      message: "Logged out successfully",
+    });
   }
 );

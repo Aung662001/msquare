@@ -18,6 +18,7 @@ app.use(
 );
 
 //regisger user route
+//login route
 app.use("/api/v1", registerRouter);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {

@@ -68,12 +68,12 @@ userSchema.pre("save", async function (next) {
 });
 
 //check if password is correct
-userSchema.methods.conparePassword = async function (
+userSchema.methods.comparePassword = async function (
   password: string
 ): Promise<boolean> {
-  return await bcryptjs.compare(password, this.password);
+  const bol = await bcryptjs.compare(password, this.password);
+  return bol;
 };
-export const userModel: Model<Iduser> = mongoose.model("User", userSchema);
 // generate access token
 userSchema.methods.getAccessToken = function () {
   const accessToken = jwt.sign(
@@ -92,3 +92,5 @@ userSchema.methods.getRefreshToken = async function () {
   );
   return refreshToken;
 };
+
+export const userModel: Model<Iduser> = mongoose.model("User", userSchema);
