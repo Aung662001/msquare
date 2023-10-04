@@ -1,8 +1,7 @@
 import mongoose, { Model, Schema } from "mongoose";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-const emailRegexPattern: RegExp =
-  /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+const emailRegexPattern: RegExp = /^([a-zA-Z0-9._%-]+@[a-zA-Z.-]+\.[a-z]{2,})$/;
 export interface Iduser extends mongoose.Document {
   name: string;
   email: string;

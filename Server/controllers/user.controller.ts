@@ -7,6 +7,7 @@ import path from "path";
 import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import { sendToken } from "../utils/jwt";
+import { redis } from "../utils/redis";
 interface User {
   name: string;
   email: string;
@@ -149,6 +150,9 @@ export const logoutUser = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
+    //clear cache
+    redis.del(req.user?._id);
+
     res.json({
       success: true,
       message: "Logged out successfully",
