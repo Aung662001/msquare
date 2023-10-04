@@ -8,6 +8,7 @@ import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import { accessCookieOptions, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
+import { getUserWithId } from "../services/user";
 interface User {
   name: string;
   email: string;
@@ -194,5 +195,15 @@ export const updateAccessToken = catchAsyncErrors(
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 400));
     }
+  }
+);
+//get user by id
+export const getUserById = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?._id;
+    if (!userId) {
+      return next(new ErrorHandler("User not found", 400));
+    }
+    getUserWithId(userId, res);
   }
 );
