@@ -7,8 +7,8 @@ interface CookieOptions {
   secure?: boolean;
   sameSite: boolean | "lax" | "strict" | "none" | undefined;
 }
-const accessCookieOptions: CookieOptions = {
-  expires: new Date(Date.now() + 1000 * 60 * 60),
+export const accessCookieOptions: CookieOptions = {
+  expires: new Date(Date.now() + 1000 * 60 * 60 * 5),
   httpOnly: true,
   sameSite: "lax",
 };
@@ -24,9 +24,9 @@ export const sendToken = async (
 ) => {
   const accessToken = user.getAccessToken();
   const refreshToken = user.getRefreshToken();
+
   //upload sessions to redis
   redis.set(user._id, JSON.stringify(user));
-
   res.cookie("access_token", accessToken, accessCookieOptions);
   res.cookie("refresh_token", refreshToken, refreshCookieOption);
 

@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import { userModel } from "../models/user.model";
 import ErrorHandler from "../utils/ErrorHandler";
 import { catchAsyncErrors } from "../middleware/catchAsyncErrors";
-import jwt, { Secret } from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import path from "path";
 import ejs from "ejs";
 import sendMail from "../utils/sendMail";
-import { sendToken } from "../utils/jwt";
+import { accessCookieOptions, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
 interface User {
   name: string;
@@ -148,14 +148,51 @@ export const loginUser = catchAsyncErrors(
 
 export const logoutUser = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
-    res.clearCookie("access_token");
-    res.clearCookie("refresh_token");
-    //clear cache
-    redis.del(req.user?._id);
+    try {
+      res.clearCookie("access_token");
+      res.clearCookie("refresh_token");
+      //clear cache
+      redis.del(req.user?._id);
 
-    res.json({
-      success: true,
-      message: "Logged out successfully",
-    });
+      res.json({
+        success: true,
+        message: "Logged out successfully",
+      });
+    } catch (err: any) {
+      return next(new ErrorHandler(err.message, 500));
+    }
+  }
+);
+
+//update access token
+export const updateAccessToken = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const refresh_token = req.cookies.refresh_token;
+    //data validate
+    if (!refresh_token) {
+      return next(new ErrorHandler("Please provide access token", 400));
+    }
+    try {
+      //check if refresh token is valid
+      const valid = jwt.verify(
+        refresh_token,
+        process.env.REFRESH_TOKEN || ""
+      ) as JwtPayload;
+      if (!valid) {
+        return next(new ErrorHandler("Refresh Token is not valid", 400));
+      }
+      //cached user data
+      const cachedUser = await redis.get(valid._id as string);
+
+      const user = JSON.parse(cachedUser as string);
+      const access_token = jwt.sign(
+        user._id,
+        process.env.ACCESS_TOKEN as string
+      );
+      res.cookie("access_token", access_token, accessCookieOptions);
+      res.status(200).json({ access_token });
+    } catch (err: any) {
+      return next(new ErrorHandler(err.message, 400));
+    }
   }
 );

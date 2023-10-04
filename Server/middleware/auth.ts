@@ -20,9 +20,22 @@ export const isAuthenticated = catchAsyncErrors(
       return next(new ErrorHandler("Invalid token", 400));
     }
 
-    const user = (await redis.get(decoded.id)) as string;
-
+    const user = (await redis.get(decoded._id)) as string;
     req.user = JSON.parse(user);
     next();
   }
 );
+export const isRoleAccess = (...roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.user?.role);
+    if (!roles.includes(req.user?.role!)) {
+      return next(
+        new ErrorHandler(
+          `Role ${req.user?.role} is not Access this Process`,
+          401
+        )
+      );
+    }
+    next();
+  };
+};

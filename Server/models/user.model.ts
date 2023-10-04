@@ -77,17 +77,19 @@ userSchema.methods.comparePassword = async function (
 userSchema.methods.getAccessToken = function () {
   const accessToken = jwt.sign(
     { _id: this._id },
-    process.env.ACCESS_TOKEN || ""
+    process.env.ACCESS_TOKEN || "",
+    { expiresIn: "5m" }
   );
   return accessToken;
 };
 
 //generate refresh token
 
-userSchema.methods.getRefreshToken = async function () {
+userSchema.methods.getRefreshToken = function () {
   const refreshToken = jwt.sign(
     { _id: this._id },
-    process.env.REFRESH_TOKEN || ""
+    process.env.REFRESH_TOKEN || "",
+    { expiresIn: "1d" }
   );
   return refreshToken;
 };

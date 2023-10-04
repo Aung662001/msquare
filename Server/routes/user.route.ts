@@ -4,8 +4,9 @@ import {
   registerUser,
   loginUser,
   logoutUser,
+  updateAccessToken,
 } from "../controllers/user.controller";
-import { isAuthenticated } from "../middleware/auth";
+import { isAuthenticated, isRoleAccess } from "../middleware/auth";
 const router = express.Router();
 
 //register and send activation email notification
@@ -16,4 +17,6 @@ router.post("/validate", activateAccount);
 router.post("/login", loginUser);
 //logout route
 router.get("/logout", isAuthenticated, logoutUser);
+//refresh token
+router.get("/refresh", updateAccessToken);
 export default router;
