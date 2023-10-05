@@ -88,7 +88,7 @@ userSchema.methods.getRefreshToken = function () {
   const refreshToken = jwt.sign(
     { _id: this._id },
     process.env.REFRESH_TOKEN || "",
-    { expiresIn: "1d" }
+    { expiresIn: "3d" }
   );
   return refreshToken;
 };

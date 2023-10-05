@@ -269,3 +269,43 @@ export const updateUser = catchAsyncErrors(
     }
   }
 );
+//update user password
+export const updateUserPassword = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { oldPassword, newPassword } = req.body;
+      //data validation
+      if (!oldPassword || !newPassword) {
+        return next(
+          new ErrorHandler("Please provide old password and new password", 400)
+        );
+      }
+      //same new password and old password
+      if (oldPassword === newPassword) {
+        return next(
+          new ErrorHandler("New password cannot be same as old password", 400)
+        );
+      }
+
+      const userId = req.user?._id;
+
+      const user = await userModel.findById(userId).select("+password");
+
+      //social user that does not exist password
+      if (user?.password == undefined) {
+        return next(new ErrorHandler("Unvalid user", 400));
+      }
+      const matchPassword = await user.comparePassword(oldPassword);
+      if (matchPassword) {
+        user.password = newPassword;
+        await user.save(); //save to database
+        redis.set(user._id, JSON.stringify(user)); //update cache in redis
+        res.status(200).json({ success: true, message: "Password changed" });
+      } else {
+        return next(new ErrorHandler("Old password not match", 400));
+      }
+    } catch (err: any) {
+      return next(new ErrorHandler(err.message, 400));
+    }
+  }
+);
