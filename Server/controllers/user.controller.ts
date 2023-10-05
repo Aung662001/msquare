@@ -207,3 +207,65 @@ export const getUserById = catchAsyncErrors(
     getUserWithId(userId, res);
   }
 );
+//logint with social media
+export const socialAuth = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { name, email } = req.body;
+
+    //validate required data
+    if (!name || !email) {
+      return next(new ErrorHandler("Please provide all required fields", 400));
+    }
+
+    try {
+      // email already exist check
+      const user = await userModel.findOne({ email });
+      if (user) {
+        //if user is already registered send access token
+        sendToken(user, 200, res);
+      } else {
+        //user is not registered create new user and send access token
+        let newUser = await userModel.create({ name, email });
+        sendToken(newUser, 200, res);
+      }
+    } catch (err: any) {
+      next(new ErrorHandler(err.message, 400));
+    }
+  }
+);
+//update user
+interface UpdateUser {
+  name?: string;
+  email?: string;
+}
+export const updateUser = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { name, email } = req.body as UpdateUser;
+      const userId = req.user?._id;
+      const user = await userModel.findById(userId);
+      //data validation
+      if (!user) {
+        return next(new ErrorHandler("User not found", 400));
+      }
+      if (name) {
+        user.name = name;
+      }
+      if (email) {
+        //email duplicate check
+        const emailExists = await userModel.findOne({ email });
+        if (emailExists) {
+          return next(new ErrorHandler("Email already exist", 400));
+        }
+        user.email = email;
+      }
+      await user.save();
+      //set user to redis cache
+      await redis.set(user._id, JSON.stringify(user));
+
+      res.status(200).json({ success: true, user });
+    } catch (err: any) {
+      return next(new ErrorHandler(err.message, 400));
+    }
+  }
+);

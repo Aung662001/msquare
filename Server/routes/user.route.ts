@@ -6,6 +6,7 @@ import {
   logoutUser,
   updateAccessToken,
   getUserById,
+  updateUser,
 } from "../controllers/user.controller";
 import { isAuthenticated, isRoleAccess } from "../middleware/auth";
 const router = express.Router();
@@ -22,4 +23,6 @@ router.get("/logout", isAuthenticated, logoutUser);
 router.get("/refresh", updateAccessToken);
 //get user informations
 router.get("/user/:id", isAuthenticated, getUserById);
+//update user informations
+router.post("/user/update", isAuthenticated, updateUser);
 export default router;

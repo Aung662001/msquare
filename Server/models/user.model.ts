@@ -38,7 +38,6 @@ const userSchema: Schema<Iduser> = new Schema(
     password: {
       type: String,
       minlength: [6, "Password must be at least 6 characters long"],
-      required: true,
       select: false,
     },
     avatar: {
