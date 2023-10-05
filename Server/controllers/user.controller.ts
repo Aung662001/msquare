@@ -9,6 +9,7 @@ import sendMail from "../utils/sendMail";
 import { accessCookieOptions, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
 import { getUserWithId } from "../services/user";
+import cloudinary from "cloudinary";
 interface User {
   name: string;
   email: string;
@@ -306,6 +307,40 @@ export const updateUserPassword = catchAsyncErrors(
       }
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 400));
+    }
+  }
+);
+
+//change avater
+export const updateProfilePicture = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { avatar } = req.body;
+    const userId = req.user?._id;
+    //data validation
+    if (!avatar) {
+      return next(new ErrorHandler("Please provide avatar", 400));
+    }
+    const user = await userModel.findById(userId);
+    if (user) {
+      //if avatar is already present
+      if (user?.avatar?.public_id) {
+        await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+      }
+      //
+      const cloudData = await cloudinary.v2.uploader.upload(avatar, {
+        folder: "avatar",
+      });
+
+      user.avatar = {
+        public_id: cloudData.public_id,
+        url: cloudData.url,
+      };
+
+      await user.save(); //save to database
+      await redis.set(userId, JSON.stringify(user)); //update cache in redis
+      res.status(200).json({ success: true, user });
+    } else {
+      return next(new ErrorHandler("User not found", 400));
     }
   }
 );
