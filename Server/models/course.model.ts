@@ -20,6 +20,7 @@ interface ICourseData extends Document {
   description: string;
   videoUrl: string;
   videoThumbnail: object;
+  videoSection: string;
   videoLength: number;
   videoPlayer: string;
   links: ILink[];
@@ -59,4 +60,66 @@ const commentSchema: Schema<IComment> = new Schema({
   comment: String,
   commentReplies: [Object],
 });
-const courseDataSchema: Schema<ICourseData> = new Schema({});
+const courseDataSchema: Schema<ICourseData> = new Schema({
+  titles: String,
+  description: String,
+  videoUrl: String,
+  videoThumbnail: Object,
+  videoLength: Number,
+  videoSection: String,
+  videoPlayer: String,
+  links: [linkSchema],
+  suggestion: String,
+  questions: [commentSchema],
+});
+const courseSchema: Schema<ICourse> = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  estimatedPrice: Number,
+  thumbnail: {
+    public_id: {
+      required: true,
+      type: String,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+  },
+  tags: {
+    type: String,
+    required: true,
+  },
+  lavel: {
+    type: String,
+    required: true,
+  },
+  demoUrl: {
+    type: String,
+    required: true,
+  },
+  benefit: [{ title: String }],
+  prerequisites: [{ title: String }],
+  reviews: [reviewsSchema],
+  courseData: [courseDataSchema],
+  rating: {
+    type: Number,
+    default: 0,
+  },
+  purchased: {
+    type: Number,
+    default: 0,
+  },
+});
+const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema);
+export default CourseModel;
