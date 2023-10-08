@@ -11,7 +11,7 @@ import {
   updateUserPassword,
   updateProfilePicture,
 } from "../controllers/user.controller";
-import { isAuthenticated, isRoleAccess } from "../middleware/auth";
+import { isAuthenticated, accessedRole } from "../middleware/auth";
 const router = express.Router();
 
 //register and send activation email notification

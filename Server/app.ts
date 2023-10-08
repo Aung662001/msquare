@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import registerRouter from "./routes/user.route";
 import { ErrorMiddleware } from "./middleware/error";
+import courseRouter from "./routes/course.route";
 
 export const app = express();
 
@@ -20,6 +21,7 @@ app.use(
 //regisger user route
 //login route
 app.use("/api/v1", registerRouter);
+app.use("/api/v1", courseRouter);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   if (req.accepts("html")) {

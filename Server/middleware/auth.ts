@@ -25,7 +25,7 @@ export const isAuthenticated = catchAsyncErrors(
     next();
   }
 );
-export const isRoleAccess = (...roles: string[]) => {
+export const accessedRole = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     // console.log(req.user?.role);
     if (!roles.includes(req.user?.role!)) {
