@@ -8,7 +8,7 @@ import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import { accessCookieOptions, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
-import { getUserWithId } from "../services/user";
+import { getUserWithId } from "../services/user.service";
 import cloudinary from "cloudinary";
 interface User {
   name: string;
@@ -333,7 +333,7 @@ export const updateProfilePicture = catchAsyncErrors(
 
       user.avatar = {
         public_id: cloudData.public_id,
-        url: cloudData.url,
+        url: cloudData.secure_url,
       };
 
       await user.save(); //save to database
