@@ -5,6 +5,7 @@ import ErrorHandler from "../utils/ErrorHandler";
 import { createNewCourse } from "../services/course.service";
 import { userModel } from "../models/user.model";
 import CourseModel from "../models/course.model";
+import { redis } from "../utils/redis";
 
 //upload course
 export const uploadCourse = catchAsyncErrors(
@@ -64,11 +65,22 @@ export const getCourseByCourseId = catchAsyncErrors(
     const courseId = req.params.id;
     if (!courseId) return next(new ErrorHandler("Course not found", 400));
     try {
+      //search cached in redis
+      const redisCached = await redis.get(courseId);
+
+      //if cached exists then send response
+      if (redisCached) {
+        const course = JSON.parse(redisCached);
+        return res.status(200).json({ success: true, course });
+      }
+
       const course = await userModel
         .findById(courseId)
         .select(
           "-courseData.questions -courseData.links -courseData.suggestion -courseData.videoUrl"
         );
+      //add cached to redis
+      await redis.set(courseId, JSON.stringify(course));
       res.status(200).json({ sucess: true, course });
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 500));
@@ -76,16 +88,52 @@ export const getCourseByCourseId = catchAsyncErrors(
   }
 );
 
-//get all courses
+//get all courses -- without purchase any charge
 export const getAllCourses = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      //search cached in redis
+      const redisCached = await redis.get("allCourses");
+      if (redisCached) {
+        //if cached, then send response with cached
+        const courses = JSON.parse(redisCached);
+        return res.status(200).json({ success: true, courses });
+      }
       const courses = await CourseModel.find().select(
         "-courseData.questions -courseData.links -courseData.suggestion -courseData.videoUrl"
       );
+      //set the cached
+      await redis.set("allCourses", JSON.stringify(courses));
+      //send response to client
       res.status(200).json({ sucess: true, courses });
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 500));
+    }
+  }
+);
+//get course -- purchase course
+export const getCourse = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userCourses = req.user?.courses; //this will be courses Id array
+    const courseId = req.params.id;
+    //data validation
+    if (!userCourses || !courseId) {
+      return next(new ErrorHandler("No Course found!", 400));
+    }
+    //check user own requested courses
+    const validCourses = userCourses.find(
+      (course) => course.toString() === courseId.toString()
+    );
+    if (!validCourses) {
+      return next(new ErrorHandler("No Course found!", 400));
+    }
+
+    try {
+      const course = await CourseModel.findById(courseId);
+      const content = course?.courseData;
+      res.status(200).json({ success: true, content });
+    } catch (err: any) {
+      return next(new ErrorHandler(err.message, 400));
     }
   }
 );

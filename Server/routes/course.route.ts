@@ -2,6 +2,7 @@ import express from "express";
 import {
   editCourse,
   getAllCourses,
+  getCourse,
   getCourseByCourseId,
   uploadCourse,
 } from "../controllers/course.controller";
@@ -30,3 +31,6 @@ export default courseRouter;
 
 //get all courses
 courseRouter.get("/get-courses", getAllCourses);
+
+//get purchase courses
+courseRouter.get("/get-course-content", getCourse);
