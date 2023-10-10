@@ -122,7 +122,7 @@ export const getCourse = catchAsyncErrors(
     }
     //check user own requested courses
     const validCourses = userCourses.find(
-      (course) => course.toString() === courseId.toString()
+      (course) => course._id.toString() === courseId.toString()
     );
     if (!validCourses) {
       return next(new ErrorHandler("No Course found!", 400));

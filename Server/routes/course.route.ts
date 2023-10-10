@@ -33,4 +33,4 @@ export default courseRouter;
 courseRouter.get("/get-courses", getAllCourses);
 
 //get purchase courses
-courseRouter.get("/get-course-content", getCourse);
+courseRouter.get("/get-course-content/:id", isAuthenticated, getCourse);

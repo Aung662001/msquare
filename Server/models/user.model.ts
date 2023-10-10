@@ -13,7 +13,7 @@ export interface Iduser extends mongoose.Document {
   role: string;
   isVerified: boolean;
   //   courses: { courseId: string }[];
-  courses: Array<{ courseId: string }>;
+  courses: Array<{ _id: string }>;
   comparePassword: (password: string) => Promise<boolean>;
   getAccessToken: () => string;
   getRefreshToken: () => string;
@@ -53,7 +53,7 @@ const userSchema: Schema<Iduser> = new Schema(
       default: false,
     },
     courses: {
-      type: [{ courseId: String }],
+      type: [{ _id: String }],
     },
   },
   { timestamps: true }
