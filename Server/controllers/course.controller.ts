@@ -174,3 +174,32 @@ export const addQuestion = catchAsyncErrors(async (req: Request, res: Response, 
     return next(new ErrorHandler(err.message, 400));
    }
 })
+
+//answer question 
+
+
+
+export const answerQuestion = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
+try{
+  const {questionId,answer ,courseId} = req.params;
+  //validate data
+  if(!mongoose.Types.ObjectId.isValid(questionId) 
+  ||!answer || !mongoose.Types.ObjectId.isValid(courseId)) 
+  {
+    return next(new ErrorHandler("Invalid data received!", 400));
+  }
+   const course = await CourseModel.findById(courseId);
+   const courseContent =  course?.courseData.find((item:any)=>item._id.toString() === questionId.toString());
+
+   if(!course || !courseContent){
+    return next(new ErrorHandler("No courses found!", 400));
+   }
+   const question = courseContent?.questions.find((item:any)=>item._id.toString() === questionId) as any;
+   //
+   question.questionReplies.push({reqly:answer});
+
+  }catch(err:any){
+    console.log(err)
+    return next(new ErrorHandler(err.message, 400));
+  }
+})
