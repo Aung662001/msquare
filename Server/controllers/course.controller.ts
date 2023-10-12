@@ -6,6 +6,7 @@ import { createNewCourse } from "../services/course.service";
 import { userModel } from "../models/user.model";
 import CourseModel from "../models/course.model";
 import { redis } from "../utils/redis";
+import mongoose from "mongoose";
 
 //upload course
 export const uploadCourse = catchAsyncErrors(
@@ -137,3 +138,39 @@ export const getCourse = catchAsyncErrors(
     }
   }
 );
+//add question 
+interface QuestionReq {
+  courseId: string;
+  contentId:string;
+  question: string;
+}
+export const addQuestion = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
+   try{
+    const {courseId, contentId, question} = req.body as QuestionReq;
+   //validate data
+     if(!courseId ||!contentId ||!question) {
+      return next(new ErrorHandler("Invalid data received!", 400));
+     }
+
+     const course = await CourseModel.findById(courseId);
+
+     if(!mongoose.Types.ObjectId.isValid(courseId) ||!course){
+      return next(new ErrorHandler("No courses found!", 400));
+     }
+
+    const courseContent =  course.courseData.find((item:any)=>item._id.toString() === contentId.toString())!;
+
+    //create new question object
+    const questionObj = {
+      user:req.user!,
+      question,
+      questionReplies:[],
+    }
+    courseContent.questions.push(questionObj);
+    //save the updated course
+    await course.save();
+    res.status(200).json({ success: true,questionObj}) 
+   }catch(err:any){
+    return next(new ErrorHandler(err.message, 400));
+   }
+})
