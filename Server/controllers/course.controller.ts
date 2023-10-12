@@ -7,6 +7,9 @@ import { userModel } from "../models/user.model";
 import CourseModel from "../models/course.model";
 import { redis } from "../utils/redis";
 import mongoose from "mongoose";
+import path from "path";
+import ejs from "ejs"
+import sendMail from "../utils/sendMail";
 
 //upload course
 export const uploadCourse = catchAsyncErrors(
@@ -181,22 +184,47 @@ export const addQuestion = catchAsyncErrors(async (req: Request, res: Response, 
 
 export const answerQuestion = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
 try{
-  const {questionId,answer ,courseId} = req.params;
+  const {questionId,answer ,courseId,contentId} = req.params;
   //validate data
-  if(!mongoose.Types.ObjectId.isValid(questionId) 
-  ||!answer || !mongoose.Types.ObjectId.isValid(courseId)) 
+  if(!mongoose.Types.ObjectId.isValid(questionId) ||
+     !mongoose.Types.ObjectId.isValid(contentId) ||
+     !answer || !mongoose.Types.ObjectId.isValid(courseId)) 
   {
     return next(new ErrorHandler("Invalid data received!", 400));
   }
    const course = await CourseModel.findById(courseId);
-   const courseContent =  course?.courseData.find((item:any)=>item._id.toString() === questionId.toString());
+   const courseContent =  course?.courseData.find((item:any)=>item._id.toString() === contentId.toString());
 
    if(!course || !courseContent){
     return next(new ErrorHandler("No courses found!", 400));
    }
    const question = courseContent?.questions.find((item:any)=>item._id.toString() === questionId) as any;
    //
-   question.questionReplies.push({reqly:answer});
+   const answerObj = {user:req.user,answer}
+   question.questionReplies.push(answerObj);
+   await course.save();
+   //noti to question user 
+   if(req.user?._id === question.user?._id){
+    // TODO:send notificaiton to question user
+   }else{
+    const data = {
+      name :question.user.name,
+      title:courseContent.title,
+      header:"Your question has been answered",
+    }
+    // const html = await ejs.renderFile(path.join(__dirname,"..","mails","email_reply.ejs"),data)
+
+    //send mail to question user
+    await sendMail({
+      email:question.user.email,
+      subject:"Your question has been answered",
+      template:"email_reply.ejs",
+      data
+    })
+
+   }
+
+   res.status(200).json({ success: true,answerObj}) 
 
   }catch(err:any){
     console.log(err)

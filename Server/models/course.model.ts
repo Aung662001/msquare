@@ -56,12 +56,15 @@ const linkSchema: Schema<ILink> = new Schema({
   url: String,
 });
 const commentSchema: Schema<IComment> = new Schema({
-  user: Object,
+  user:{
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+  },
   question: String,
   questionReplies: [Object],
 });
 const courseDataSchema: Schema<ICourseData> = new Schema({
-  titles: String,
+  title: String,
   description: String,
   videoUrl: String,
   videoLength: Number,

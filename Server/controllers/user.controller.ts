@@ -37,10 +37,12 @@ export const registerUser = catchAsyncErrors(
       };
       const { token, activationCode } = getActivationCode(user);
       const data = { user: { name: user.name }, activationCode };
-      // const html = await ejs.renderFile(
-      //   path.join(__dirname, "..", "mails", "email.ejs"),
-      //   data
-      // );
+
+      const html = await ejs.renderFile(
+        path.join(__dirname, "..", "mails", "email.ejs"),
+        data
+      );
+      
       const options = {
         email: user.email,
         subject: "Account Activation",
