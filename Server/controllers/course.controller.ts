@@ -272,3 +272,34 @@ export const reviewCourse = catchAsyncErrors(async (req: Request, res: Response,
     return next(new ErrorHandler(err.message, 400));
   }
 });
+
+//reply to review only by admin 
+interface ReplyReview{
+  reply:string;
+  courseId:string;
+  reviewId:string;
+}
+export const replyReview = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction)=>{
+ try{
+  const {reply,courseId,reviewId}:ReplyReview = req.body;//mongoose.Type.ObjectId.isValid(reviewId)
+
+  if(!reply || !courseId || reviewId){
+   return next(new ErrorHandler("Invalid data received!", 400));
+  }
+  const course = await CourseModel.findById(courseId);
+  
+ const review = course?.reviews.find((review)=>{
+  review._id.toString() === reviewId.toString()
+ })
+  if(!review){
+    return next(new ErrorHandler("No review found!", 400));
+  }
+  const replyObj:any = {user:req.user,comment:reply}
+  course?.reviews.push(replyObj)
+
+   await course?.save();
+   res.status(200).json({success:true,course})
+ }catch(err:any){
+  return next(new ErrorHandler(err.message, 400));
+ }
+})

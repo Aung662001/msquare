@@ -6,6 +6,7 @@ import {
   getAllCourses,
   getCourse,
   getCourseByCourseId,
+  replyReview,
   reviewCourse,
   uploadCourse,
 } from "../controllers/course.controller";
@@ -46,3 +47,6 @@ courseRouter.put('/add-answer',isAuthenticated,answerQuestion)
 
 //add review
 courseRouter.put('/add-review',isAuthenticated,reviewCourse)
+
+//add reply to review
+courseRouter.put('/add-reply',isAuthenticated,accessedRole("admin"),replyReview)
