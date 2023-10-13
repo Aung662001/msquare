@@ -1,9 +1,12 @@
 import express from "express";
 import {
+  addQuestion,
+  answerQuestion,
   editCourse,
   getAllCourses,
   getCourse,
   getCourseByCourseId,
+  reviewCourse,
   uploadCourse,
 } from "../controllers/course.controller";
 import { accessedRole, isAuthenticated } from "../middleware/auth";
@@ -34,3 +37,12 @@ courseRouter.get("/get-courses", getAllCourses);
 
 //get purchase courses
 courseRouter.get("/get-course-content/:id", isAuthenticated, getCourse);
+
+//add question to course
+courseRouter.put('/add-question',isAuthenticated,addQuestion)
+
+//answer question
+courseRouter.put('/add-answer',isAuthenticated,answerQuestion)
+
+//add review
+courseRouter.put('/add-review',isAuthenticated,reviewCourse)

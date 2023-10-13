@@ -231,3 +231,44 @@ try{
     return next(new ErrorHandler(err.message, 400));
   }
 })
+
+//reviews 
+interface Review{
+  review:string;
+  rating:number;
+}
+export const reviewCourse = catchAsyncErrors(async (req: Request, res: Response, next:NextFunction)=>{
+  try{
+    const {review,rating}:Review =req.body ;
+  const courseId = req.params.id;
+
+  const ownCourse = req.user?.courses.find((item:any)=>item._id.toString() == courseId) ;
+
+  if(!ownCourse){
+    return next(new ErrorHandler("You don't have access to review this course!", 400));
+  }
+  const course = await CourseModel.findById(courseId);
+  const reviewObj:any = {user:req.user, rating,comment:review}
+
+  if(course){
+    //add review to course
+    course.reviews.push(reviewObj);
+  }else{
+    return next(new ErrorHandler("No course Found!", 400));
+  }
+  let avg = 0; 
+   course?.reviews.forEach((rev)=>{
+    avg += rev.rating;
+   })
+
+   if(course){
+    //add rating to course
+    course.rating = avg/course.reviews.length;
+   }
+   await course?.save();
+   //send noti to course owner
+   res.status(200).json({success:true,course})
+  }catch(err:any){
+    return next(new ErrorHandler(err.message, 400));
+  }
+});
