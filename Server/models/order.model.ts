@@ -1,6 +1,6 @@
 import mongoose, { Schema ,Model} from "mongoose";
 
-interface Order extends Document{
+export interface Order extends Document{
     userId:string;
     courseId:string;
     payment_info:object;

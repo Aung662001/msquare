@@ -5,8 +5,6 @@ import { redis } from "../utils/redis";
 export const getUserWithId = async (userId: string, res: Response) => {
   try {
     const userJson = await redis.get(userId);
-    console.log(userId);
-    console.log(userJson);
     if (userJson) {
       let user = JSON.parse(userJson);
       res.json({ success: true, user });

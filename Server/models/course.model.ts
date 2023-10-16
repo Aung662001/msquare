@@ -42,7 +42,7 @@ interface ICourse extends Document {
   reviews: IReview[];
   courseData: ICourseData[];
   rating?: number;
-  purchased?: boolean;
+  purchased?: number;
 }
 const reviewsSchema: Schema<IReview> = new Schema({
   user: Object,

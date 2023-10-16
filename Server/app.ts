@@ -6,6 +6,7 @@ import path from "path";
 import registerRouter from "./routes/user.route";
 import { ErrorMiddleware } from "./middleware/error";
 import courseRouter from "./routes/course.route";
+import OrderRouter from "./routes/order.route";
 
 export const app = express();
 
@@ -18,10 +19,8 @@ app.use(
   })
 );
 
-//regisger user route
-//login route
-app.use("/api/v1", registerRouter);
-app.use("/api/v1", courseRouter);
+
+app.use("/api/v1", registerRouter,courseRouter,OrderRouter);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   if (req.accepts("html")) {
