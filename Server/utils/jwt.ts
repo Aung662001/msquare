@@ -12,7 +12,7 @@ export const accessCookieOptions: CookieOptions = {
   httpOnly: true,
   sameSite: "lax",
 };
-const refreshCookieOption: CookieOptions = {
+export const refreshCookieOption: CookieOptions = {
   expires: new Date(Date.now() + 1000 * 60 * 60 * 60 * 24 * 3),
   httpOnly: true,
   sameSite: "lax",

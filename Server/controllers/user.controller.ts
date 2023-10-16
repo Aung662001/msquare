@@ -6,7 +6,7 @@ import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import path from "path";
 import ejs from "ejs";
 import sendMail from "../utils/sendMail";
-import { accessCookieOptions, sendToken } from "../utils/jwt";
+import { accessCookieOptions,refreshCookieOption, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
 import { getUserWithId } from "../services/user.service";
 import cloudinary from "cloudinary";
@@ -193,7 +193,13 @@ export const updateAccessToken = catchAsyncErrors(
         user._id,
         process.env.ACCESS_TOKEN as string
       );
+      //new refresh token | if don't want this need to create a endpoint for refresh token
+      const refresh = jwt.sign(
+        user._id,
+        process.env.REFRESH_TOKEN as string
+      );
       res.cookie("access_token", access_token, accessCookieOptions);
+      res.cookie("access_token", refresh, refreshCookieOption);
       res.status(200).json({ access_token });
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 400));

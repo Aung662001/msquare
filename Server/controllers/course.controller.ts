@@ -295,9 +295,15 @@ export const replyReview = catchAsyncErrors(async (req: Request, res: Response, 
     return next(new ErrorHandler("No review found!", 400));
   }
   const replyObj:any = {user:req.user,comment:reply}
-  course?.reviews.push(replyObj)
+   
+  //if comment reply is undefined then create an empty reply
+  if(!review.commentReplies){
+    review.commentReplies = [];
+  }
+   review.commentReplies.push(replyObj)
 
    await course?.save();
+   
    res.status(200).json({success:true,course})
  }catch(err:any){
   return next(new ErrorHandler(err.message, 400));
