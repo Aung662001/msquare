@@ -7,6 +7,7 @@ import registerRouter from "./routes/user.route";
 import { ErrorMiddleware } from "./middleware/error";
 import courseRouter from "./routes/course.route";
 import OrderRouter from "./routes/order.route";
+import NotificationRouter from "./routes/notification.route";
 
 export const app = express();
 
@@ -20,7 +21,7 @@ app.use(
 );
 
 
-app.use("/api/v1", registerRouter,courseRouter,OrderRouter);
+app.use("/api/v1", registerRouter,courseRouter,OrderRouter,NotificationRouter);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   if (req.accepts("html")) {
