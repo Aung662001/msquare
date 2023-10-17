@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { userModel } from "../models/user.model";
 import { redis } from "../utils/redis";
+import { catchAsyncErrors } from "../middleware/catchAsyncErrors";
 
 export const getUserWithId = async (userId: string, res: Response) => {
   try {
@@ -16,3 +17,12 @@ export const getUserWithId = async (userId: string, res: Response) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+//get all users for admin
+export const getAllUsersService = async(res:Response)=>{
+try{
+  const users = await userModel.find().sort({createdAt:-1 })
+  res.status(200).json({success:true,users})
+}catch(err:any){
+  res.status(500).json({success:false,message:err.message})
+}
+}

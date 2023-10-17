@@ -4,6 +4,7 @@ import {
   answerQuestion,
   editCourse,
   getAllCourses,
+  getAllCoursesAdmin,
   getCourse,
   getCourseByCourseId,
   replyReview,
@@ -50,3 +51,6 @@ courseRouter.put('/add-review',isAuthenticated,reviewCourse)
 
 //add reply to review
 courseRouter.put('/add-reply',isAuthenticated,accessedRole("admin"),replyReview)
+
+// get all courses for admin
+courseRouter.get("/get-courses-admin",isAuthenticated,accessedRole('admin'),getAllCoursesAdmin)

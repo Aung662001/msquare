@@ -8,7 +8,7 @@ import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import { accessCookieOptions,refreshCookieOption, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
-import { getUserWithId } from "../services/user.service";
+import { getAllUsersService, getUserWithId } from "../services/user.service";
 import cloudinary from "cloudinary";
 interface User {
   name: string;
@@ -352,3 +352,11 @@ export const updateProfilePicture = catchAsyncErrors(
     }
   }
 );
+//get all user 
+export const getAllUsers = catchAsyncErrors(async(req:Request,res:Response,next:NextFunction)=>{
+  try{
+    getAllUsersService(res)
+  }catch(err:any){
+    return next(new ErrorHandler(err.message,500))
+  }
+})

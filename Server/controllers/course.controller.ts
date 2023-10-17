@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { catchAsyncErrors } from "../middleware/catchAsyncErrors";
 import cloudinary from "cloudinary";
 import ErrorHandler from "../utils/ErrorHandler";
-import { createNewCourse } from "../services/course.service";
+import { createNewCourse, getAllCoursesService } from "../services/course.service";
 import { userModel } from "../models/user.model";
 import CourseModel from "../models/course.model";
 import { redis } from "../utils/redis";
@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 import path from "path";
 import ejs from "ejs"
 import sendMail from "../utils/sendMail";
+import NotificationModel from "../models/notificaton.model";
 
 //upload course
 export const uploadCourse = catchAsyncErrors(
@@ -172,6 +173,13 @@ export const addQuestion = catchAsyncErrors(async (req: Request, res: Response, 
     courseContent.questions.push(questionObj);
     //save the updated course
     await course.save();
+    //add notification
+    await NotificationModel.create({
+      userId:req.user?.id,
+      title:"New Question",
+      message:`${req.user?.name} added a new question to ${courseContent.title}`,
+    })
+
     res.status(200).json({ success: true,questionObj}) 
    }catch(err:any){
     return next(new ErrorHandler(err.message, 400));
@@ -205,7 +213,13 @@ try{
    await course.save();
    //noti to question user 
    if(req.user?._id === question.user?._id){
-    // TODO:send notificaiton to question user
+    // send notificaiton to question user
+    await NotificationModel.create({
+      userId:question.user?._id,
+      title:"New Answer",
+      message:`${req.user?.name} repley your question to ${courseContent.title}`,
+    })
+
    }else{
     const data = {
       name :question.user.name,
@@ -308,4 +322,13 @@ export const replyReview = catchAsyncErrors(async (req: Request, res: Response, 
  }catch(err:any){
   return next(new ErrorHandler(err.message, 400));
  }
+})
+
+// get all courses for admin
+export const getAllCoursesAdmin = catchAsyncErrors(async(req:Request,res:Response,next:NextFunction)=>{
+try{
+  getAllCoursesService(res)
+}catch(err:any){
+  return next(new ErrorHandler(err.message, 500));
+}
 })
