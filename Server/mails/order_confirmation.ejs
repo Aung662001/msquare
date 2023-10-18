@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin:0;
+            box-sizing: border-box;
+            color: rgb(117, 179, 203);
+        }
+        body{
+            background-color: rgb(43, 38, 38);
+            border: 2px solid rgb(65, 61, 205);
+            height: 100vh;
+        }
+        h1{
+            text-align: center;
+        }
+        div{
+            margin: 0 auto;
+            margin-top: 50%;
+        }
+        table{
+            width: 400px;
+            height: 100px;
+            margin: 0 auto;
+        }
+        table th, td{
+            border: 1px solid white;
+        }
+        table th{
+            color:blueviolet;
+            font-weight: bold;
+        }
+        h3,p , small{
+            width: 100vw;
+            text-align: center;
+            margin: 3px;
+        }
+        a{
+            color: rgb(65, 65, 197);
+        }
+    </style>
+</head>
+<body>
+    <h1>Thank You For Beleving Our's Msquare</h1>
+    <h3>We are very excited to lead your cearer!</h3>
+    <table>
+        <tr>
+            <th>CourseId</th>
+            <th>Title</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Date</th>
+        </tr>
+        <tr>
+            <td><% order.courseId %></td>
+            <td><% order.title %></td>
+            <td>1</td>
+            <td><% order.price %></td>
+            <td><% order.date %></td>
+        </tr>
+    </table>
+        <p>For more information please contact the following email.</p>
+        <p>
+            <small><a href="mailto:setannatsoegodzzz@gmail.com">setannatsoegodzzz@gmail.com</a></small>
+        </p>
+</body>
+</html>
