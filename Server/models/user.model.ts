@@ -94,3 +94,4 @@ userSchema.methods.getRefreshToken = function () {
 };
 
 export const userModel: Model<Iduser> = mongoose.model("User", userSchema);
+

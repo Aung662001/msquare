@@ -26,3 +26,9 @@ try{
   res.status(500).json({success:false,message:err.message})
 }
 }
+
+//change user role
+export const changeUserRole  = async(res:Response,id:String,role:String)=>{
+const user = await userModel.findByIdAndUpdate(id,{role:role},{new:true})
+res.status(200).json({success:true,user})
+}

@@ -10,6 +10,8 @@ import {
   socialAuth,
   updateUserPassword,
   updateProfilePicture,
+  updateUserRoleByAdmin,
+  deleteUser,
 } from "../controllers/user.controller";
 import { isAuthenticated, accessedRole } from "../middleware/auth";
 import { getAllUsersService } from "../services/user.service";
@@ -48,3 +50,9 @@ export default router;
 
 //get all users for admin
 router.get('/get-users',isAuthenticated,accessedRole('admin'),getAllUsersService)
+
+//update user role -->admin 
+router.put('/update-user',isAuthenticated,accessedRole('admin'),updateUserRoleByAdmin)
+
+//delete user by admin
+router.delete('/delete-user/:id',isAuthenticated,accessedRole('admin'),deleteUser)

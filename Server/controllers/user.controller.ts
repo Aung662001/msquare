@@ -8,8 +8,9 @@ import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import { accessCookieOptions,refreshCookieOption, sendToken } from "../utils/jwt";
 import { redis } from "../utils/redis";
-import { getAllUsersService, getUserWithId } from "../services/user.service";
+import { changeUserRole, getAllUsersService, getUserWithId } from "../services/user.service";
 import cloudinary from "cloudinary";
+import mongoose from "mongoose";
 interface User {
   name: string;
   email: string;
@@ -356,6 +357,39 @@ export const updateProfilePicture = catchAsyncErrors(
 export const getAllUsers = catchAsyncErrors(async(req:Request,res:Response,next:NextFunction)=>{
   try{
     getAllUsersService(res)
+  }catch(err:any){
+    return next(new ErrorHandler(err.message,500))
+  }
+})
+
+//update user role -->admin role
+interface Role{
+  id:string;
+  role:string;
+}
+export const updateUserRoleByAdmin= catchAsyncErrors(async(req:Request,res:Response,next:NextFunction)=>{
+  try{
+    const {id,role}:Role=req.body;
+    if(!id || !role){
+      return next(new ErrorHandler("Please provide all required fields",400))
+    }
+    changeUserRole(res,id,role)
+  }catch(err:any){
+    return next(new ErrorHandler(err.message,500))
+  }
+})
+
+//delete user by admin
+export const deleteUser= catchAsyncErrors(async(req:Request,res:Response,next:NextFunction)=>{
+  try{
+    const id = req.params.id;
+    if(!id || !mongoose.Types.ObjectId.isValid(id)){
+      return next(new ErrorHandler("Please provide user id",400))
+    }
+    const user = await userModel.deleteOne({id});
+    await redis.del(id);
+
+    res.status(200).json({success:true,message:"User deleted"})
   }catch(err:any){
     return next(new ErrorHandler(err.message,500))
   }
