@@ -332,3 +332,19 @@ try{
   return next(new ErrorHandler(err.message, 500));
 }
 })
+
+//delete courses for admin
+export const deleteCourse= catchAsyncErrors(async(req:Request,res:Response,next:NextFunction)=>{
+  try{
+    const id = req.params.id;
+    if(!id || !mongoose.Types.ObjectId.isValid(id)){
+      return next(new ErrorHandler("Please provide course id",400))
+    }
+    const course = await CourseModel.deleteOne({id});
+    await redis.del(id);
+
+    res.status(200).json({success:true,message:"Course deleted"})
+  }catch(err:any){
+    return next(new ErrorHandler(err.message,500))
+  }
+})

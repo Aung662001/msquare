@@ -120,6 +120,6 @@ const courseSchema: Schema<ICourse> = new Schema({
     type: Number,
     default: 0,
   },
-});
+},{timestamps:true});
 const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema);
 export default CourseModel;

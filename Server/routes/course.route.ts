@@ -2,6 +2,7 @@ import express from "express";
 import {
   addQuestion,
   answerQuestion,
+  deleteCourse,
   editCourse,
   getAllCourses,
   getAllCoursesAdmin,
@@ -54,3 +55,6 @@ courseRouter.put('/add-reply',isAuthenticated,accessedRole("admin"),replyReview)
 
 // get all courses for admin
 courseRouter.get("/get-courses-admin",isAuthenticated,accessedRole('admin'),getAllCoursesAdmin)
+
+//delete courses for admin
+courseRouter.delete('/delete-course/:id',isAuthenticated,accessedRole('admin'),deleteCourse)
