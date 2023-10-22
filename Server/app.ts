@@ -9,6 +9,7 @@ import courseRouter from "./routes/course.route";
 import OrderRouter from "./routes/order.route";
 import NotificationRouter from "./routes/notification.route";
 import AnalyticsRouter from "./routes/analytics.route"
+import LayourRouter from "./routes/layout.route"
 
 export const app = express();
 
@@ -21,7 +22,7 @@ app.use(
   })
 );
 
-app.use("/api/v1", registerRouter,courseRouter,OrderRouter,NotificationRouter,AnalyticsRouter);
+app.use("/api/v1", registerRouter,courseRouter,OrderRouter,NotificationRouter,AnalyticsRouter,LayourRouter);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   if (req.accepts("html")) {

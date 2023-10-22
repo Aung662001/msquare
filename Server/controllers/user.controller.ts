@@ -140,7 +140,6 @@ export const loginUser = catchAsyncErrors(
       if (!isPasswordMatched) {
         throw new ErrorHandler("Password  not match", 400);
       }
-      console.log("password pass");
       //form jwt.ts
       sendToken(user, 200, res);
     } catch (err: any) {
@@ -181,26 +180,28 @@ export const updateAccessToken = catchAsyncErrors(
       //check if refresh token is valid
       const valid = jwt.verify(
         refresh_token,
-        process.env.REFRESH_TOKEN || ""
+        process.env.REFRESH_TOKEN || "",
       ) as JwtPayload;
       if (!valid) {
         return next(new ErrorHandler("Refresh Token is not valid", 400));
       }
+      console.log(valid)
       //cached user data
       const cachedUser = await redis.get(valid._id as string);
-
       const user = JSON.parse(cachedUser as string);
       const access_token = jwt.sign(
-        user._id,
-        process.env.ACCESS_TOKEN as string
+       {_id: user._id},
+        process.env.ACCESS_TOKEN as string,
+        {expiresIn:"1d"}
       );
       //new refresh token | if don't want this need to create a endpoint for refresh token
       const refresh = jwt.sign(
-        user._id,
-        process.env.REFRESH_TOKEN as string
+        {_id:user._id},
+        process.env.REFRESH_TOKEN || "",
+        { expiresIn: "3d" }
       );
       res.cookie("access_token", access_token, accessCookieOptions);
-      res.cookie("access_token", refresh, refreshCookieOption);
+      res.cookie("refresh_token", refresh, refreshCookieOption);
       res.status(200).json({ access_token });
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 400));

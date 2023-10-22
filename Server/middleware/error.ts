@@ -21,6 +21,7 @@ export const ErrorMiddleware = (
   }
   //wrong jwt token
   if (err.name === "JsonWebTokenError") {
+    console.log(err.message)
     const message = `Josn Token is invalid . Please try again`;
     err = new ErrorHandler(message, 401);
   }

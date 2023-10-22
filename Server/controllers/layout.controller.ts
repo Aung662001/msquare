@@ -30,7 +30,7 @@ export const createLayout = catchAsyncErrors(async(req:Request,res:Response,next
         await LayoutModel.create(banner)
     }
     if(type =="faq"){
-        const faq= req.body;
+        const {faq}= req.body;
         const faqItems = await Promise.all(
             faq.map(async(item:any)=>{
                 return{
@@ -39,6 +39,7 @@ export const createLayout = catchAsyncErrors(async(req:Request,res:Response,next
                 }
             })
         )
+        console.log(faqItems,"items")
         await LayoutModel.create({type:"faq",faqItems})
     }
     if(type === "categories"){
