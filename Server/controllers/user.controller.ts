@@ -185,7 +185,6 @@ export const updateAccessToken = catchAsyncErrors(
       if (!valid) {
         return next(new ErrorHandler("Refresh Token is not valid", 400));
       }
-      console.log(valid)
       //cached user data
       const cachedUser = await redis.get(valid._id as string);
       const user = JSON.parse(cachedUser as string);
