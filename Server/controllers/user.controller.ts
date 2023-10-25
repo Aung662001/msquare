@@ -187,6 +187,9 @@ export const updateAccessToken = catchAsyncErrors(
       }
       //cached user data
       const cachedUser = await redis.get(valid._id as string);
+      if (!cachedUser) {
+        return next(new ErrorHandler("Please login!", 400));
+      }
       const user = JSON.parse(cachedUser as string);
       const access_token = jwt.sign(
        {_id: user._id},
@@ -201,6 +204,7 @@ export const updateAccessToken = catchAsyncErrors(
       );
       res.cookie("access_token", access_token, accessCookieOptions);
       res.cookie("refresh_token", refresh, refreshCookieOption);
+      redis.set(user._id,JSON.stringify(user),"EX",604800);//update redis and expire in 7 days
       res.status(200).json({ access_token });
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 400));

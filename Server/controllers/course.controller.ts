@@ -85,7 +85,7 @@ export const getCourseByCourseId = catchAsyncErrors(
           "-courseData.questions -courseData.links -courseData.suggestion -courseData.videoUrl"
         );
       //add cached to redis
-      await redis.set(courseId, JSON.stringify(course));
+      await redis.set(courseId, JSON.stringify(course),'EX',604800);
       res.status(200).json({ sucess: true, course });
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 500));
