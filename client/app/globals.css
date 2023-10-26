@@ -19,3 +19,77 @@
 body {
   color: rgb(var(--foreground-rgb));
 }
+.header{
+  opacity: 1;
+  text-shadow: 7px 4px 15px rgb(119, 152, 119);
+  animation:change 3s linear 2s infinite alternate;
+}
+.moti{
+  opacity: 1;
+  font-size: 30px;
+  font-weight: 500;
+  text-shadow: 7px 4px 15px rgb(119, 152, 119);
+  animation:change 3s linear 5s infinite alternate;
+}
+.stdcount{
+  font-size: 20px;
+  font-weight: 500;
+  text-shadow: 7px 4px 15px rgb(119, 152, 119);
+  animation:change 3s linear 5s infinite alternate
+}
+.msquare{
+  color: red;
+  position: relative;
+}
+.msquare::before{
+  content:"|";
+  color: transparent;
+  box-shadow: 5px 5px 20px black;
+  width: 100%;
+  height: 100%;
+  position:absolute;
+  right: 0;
+  background-color: black;
+  animation:msquare 2s linear alternate infinite ;
+  animation-delay: 2s;
+}
+@keyframes change {
+  0%   {text-shadow:7px 6px 15px rgb(119, 152, 119)}
+  5%   {text-shadow:7px 6px 15px rgb(100, 145, 100)}
+  7%   {text-shadow:7px 6px 15px rgb(88, 167, 88)}
+  12%  {text-shadow:7px 6px 15px rgb(46, 155, 46)}
+  15%  {text-shadow:7px 6px 15px rgb(6, 214, 6)}
+  20%  {text-shadow:7px 6px 15px rgb(78, 86, 165)}
+  23%  {text-shadow:7px 6px 15px rgb(43, 74, 145)}
+  28%  {text-shadow:7px 6px 15px rgb(26, 62, 146)}
+  30%  {text-shadow:7px 6px 15px rgb(0, 65, 216)}
+  33%  {text-shadow:7px 6px 15px rgb(116, 71, 172)}
+  35%  {text-shadow:7px 6px 15px rgb(98, 42, 166)}
+  38%  {text-shadow:7px 6px 15px rgb(90, 24, 171)}
+  40%  {text-shadow:7px 6px 15px rgb(110, 6, 236)}
+  43%  {text-shadow:7px 6px 15px rgb(171, 102, 156)}
+  46%  {text-shadow:7px 6px 15px rgb(172, 72, 151)}
+  48%  {text-shadow:7px 6px 15px rgb(194, 36, 160)}
+  50%  {text-shadow:7px 6px 15px rgb(239, 19, 192)}
+  55%  {text-shadow:7px 6px 15px rgb(218, 68, 101)}
+  60%  {text-shadow:7px 6px 15px rgb(227, 19, 64)}
+  65%  {text-shadow:7px 6px 15px rgb(188, 143, 82)}
+  70%  {text-shadow:7px 6px 15px rgb(212, 140, 39)}
+  75%  {text-shadow:7px 6px 15px rgb(245, 20, 20)}
+  80%  {text-shadow:7px 6px 15px rgb(142, 6, 6)}
+  85%  {text-shadow:7px 6px 15px rgb(42, 205, 5)}
+  90%  {text-shadow:7px 6px 15px rgb(21, 100, 4)}
+  95%  {text-shadow:7px 6px 15px rgb(16, 8, 239)}
+  100% {text-shadow:7px 6px 15px rgb(6, 3, 98)}
+}
+@keyframes msquare {
+  0%   {width: 100%;color: red;}
+  12% {color:transparent}
+  25%  {width: 75%;color: red;}
+  37% {color:transparent}
+  50%  {width: 50%;color: red;}
+  62% {color: transparent;}
+  75%  {width: 25%;color:red}
+  87% {color:transparent}
+  100% {width: 0%;color: red;}
+}
