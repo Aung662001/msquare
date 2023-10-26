@@ -4,6 +4,7 @@ import React, { FC, useState } from "react";
 import NavItems from "../utils/NavItems";
 import ThemeSwitcher from "../ThemeSwitcher";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
+import CustomModal from "../utils/CustomModal";
 
 interface Props {
   open: boolean;
@@ -13,6 +14,7 @@ interface Props {
 const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const [route,setRoute] = useState("login")
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -88,6 +90,17 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
           </div>
         )}
       </div>
+       {
+        route == "Login" && (
+            <>
+            {
+              open && (
+                <CustomModal open={open} setOpen={setOpen} setRoute={setRoute} />
+              )
+            }
+            </>
+        )
+       }
     </div>
   );
 };
