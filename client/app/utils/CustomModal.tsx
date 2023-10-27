@@ -17,7 +17,7 @@ const CustumModal: FC<Props> = ({ open, setOpen, activeNumber,component:Componen
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="absolute w-[500px] top-[50%] left-[50%] h-[500px] -translate-y-1/2 outline-none rounded-lg shadow-md p-4 -translate-x-1/2 bg-white dark:bg-slate-900 ">
+        <Box className="absolute w-[500px] top-[50%] left-[50%]  -translate-y-1/2 outline-none rounded-lg shadow-md p-4 -translate-x-1/2 bg-white dark:bg-slate-900 ">
          <Component setOpen={setOpen} setRoute={setRoute}/>
         </Box>
       </Modal>

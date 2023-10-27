@@ -24,17 +24,18 @@ body {
   opacity: 1;
   text-shadow: 7px 4px 15px rgb(119, 152, 119);
   animation:change 3s linear 2s infinite alternate;
+  text-wrap: nowrap;
 }
 .moti{
   opacity: 1;
-  font-size: 30px;
-  font-weight: 500;
+  /* font-size: 30px;
+  font-weight: 500; */
   text-shadow: 7px 4px 15px rgb(119, 152, 119);
   animation:change 5s linear 5s infinite alternate;
 }
 .stdcount{
-  font-size: 20px;
-  font-weight: 500;
+  /* font-size: 20px;
+  font-weight: 500; */
   text-shadow: 7px 4px 15px rgb(119, 152, 119);
   animation:change 3s linear 5s infinite alternate
 }
