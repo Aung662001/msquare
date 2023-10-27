@@ -5,6 +5,7 @@ import NavItems from "../utils/NavItems";
 import ThemeSwitcher from "../ThemeSwitcher";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
 import CustomModal from "../utils/CustomModal";
+import Login from "../components/Auth/Login";
 
 interface Props {
   open: boolean;
@@ -14,7 +15,7 @@ interface Props {
 const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
-  const [route,setRoute] = useState("login")
+  const [route, setRoute] = useState("login");
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -63,7 +64,7 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
               {/* profile */}
               <HiOutlineUserCircle
                 size={25}
-                onClick={() => setOpen(false)}
+                onClick={() => setOpen(true)}
                 className="cursor-pointer mx-4 hidden 800px:block dark:text-white text-black"
               />
             </div>
@@ -82,7 +83,7 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
                 {" "}
                 <HiOutlineUserCircle
                   size={30}
-                  onClick={() => setOpen(false)}
+                  onClick={() => setOpen(true)}
                   className="cursor-pointer  dark:text-white text-black mx-auto hover:scale-[1.3] transition-transform duration-300"
                 />
               </div>
@@ -90,17 +91,21 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
           </div>
         )}
       </div>
-       {
-        route == "Login" && (
-            <>
-            {
-              open && (
-                <CustomModal open={open} setOpen={setOpen} setRoute={setRoute} />
-              )
-            }
-            </>
-        )
-       }
+      {
+         route == "login" && (
+        <>
+          {open && (
+            <CustomModal
+              open={open}
+              setOpen={setOpen}
+              setRoute={setRoute}
+              activeNumber={activeNumber}
+              component={Login}
+            />
+          )}
+        </>
+         )
+      }
     </div>
   );
 };

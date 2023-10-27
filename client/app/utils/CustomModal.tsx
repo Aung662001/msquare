@@ -1,14 +1,14 @@
 import React, { FC } from "react";
-import { Modal } from "@mui/material";
+import { Box, Modal,TextField } from "@mui/material";
 
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
-  activeItem: any;
+  activeNumber: any;
   component: any;
-  setRoute: (route: string) => void;
+  setRoute?: (route: string) => void;
 }
-const CustumModal: FC<Props> = ({ open, setOpen, activeItem }) => {
+const CustumModal: FC<Props> = ({ open, setOpen, activeNumber,component:Component,setRoute }) => {
   return (
     <>
       <Modal
@@ -16,7 +16,11 @@ const CustumModal: FC<Props> = ({ open, setOpen, activeItem }) => {
         onClose={() => setOpen(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-      ></Modal>
+      >
+        <Box className="absolute w-[500px] top-[50%] left-[50%] h-[500px] -translate-y-1/2 outline-none rounded-lg shadow-md p-4 -translate-x-1/2 bg-white dark:bg-slate-900 ">
+         <Component setOpen={setOpen} setRoute={setRoute}/>
+        </Box>
+      </Modal>
     </>
   );
 };

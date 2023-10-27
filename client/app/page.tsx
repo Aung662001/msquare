@@ -16,7 +16,7 @@ const Page: FC<Props> = (props) => {
         description="You want, you try"
         keywords="learning,programming,msquare,react,nextjs,mysql"
       />
-      <Header open={open} setOpen={setOpen} activeNumber={activeNumber} />
+        <Header open={open} setOpen={setOpen} activeNumber={activeNumber} />
       <Hero />
     </div>
   );
