@@ -8,6 +8,8 @@ import { FcGoogle } from "react-icons/fc";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { styles } from "@/app/styles/style";
+import { CircularProgress } from "@mui/material";
+import { useActivationMutation } from "@/redux/features/auth/authApiSlice";
 
 type Props = {
   setRoute: (route: string) => void;
@@ -31,6 +33,7 @@ const Login: FC<Props> = ({setOpen,setRoute}) => {
     },
   });
   const { errors, values, touched, handleChange, handleSubmit } = formik;
+
   return (
     <div className="w-full">
       <h1 className={styles.title}>Login To Msquare Community</h1>
@@ -83,19 +86,29 @@ const Login: FC<Props> = ({setOpen,setRoute}) => {
             />
           )}
           {errors.password && touched.password && (
-            <span className="text-red-500 pt-2 block">{errors.email}</span>
+            <span className="text-red-500 pt-2 block">{errors.password}</span>
           )}
         </div>
-        <div className={`${styles.button}`}>
-          <input type="submit" value="Login" className="cursor-pointer" />
-        </div>
+        <button
+        type="submit"
+          onClick={()=>handleSubmit}
+          className={`${styles.button} ${
+            true ? "!bg-slate-500" : ""
+          } cursor-pointer z-[99999]`}
+        >
+          {true ? (
+            <CircularProgress size={23} color="secondary" />
+          ) : (
+            "Submit"
+          )}
+        </button>
       </form>
-      <h5 className="text-center">Or Login With</h5>
+      <h5 className="text-center  text-black dark:text-white">Or Login With</h5>
       <div className="flex items-center justify-center my-4 gap-3">
-        <AiFillGithub size={35} className="cursor-pointer" />
+        <AiFillGithub size={35} className="cursor-pointer bg-black rounded-full " />
         <FcGoogle size={35} className="cursor-pointer" />
       </div>
-      <h5 className="text-center font-Poppins font-[500]">
+      <h5 className="text-center font-Poppins font-[500]  text-black dark:text-white">
         Not have an account ?{" "}
         <span className="text-sky-500 cursor-pointer"
         onClick={()=>setRoute('sign-up')}>Sign Up</span>

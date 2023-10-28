@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import {
   AiOutlineEye,
   AiOutlineEyeInvisible,
@@ -8,6 +8,9 @@ import { FcGoogle } from "react-icons/fc";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { styles } from "@/app/styles/style";
+import { toast } from "react-hot-toast";
+import { useRegisterMutation } from "@/redux/features/auth/authApiSlice";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type Props = {
   setRoute: (route: string) => void;
@@ -19,19 +22,38 @@ const schema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email")
     .required("Please enter your email address"),
-  password: Yup.string().required("Please enter your password").min(6),
+  password: Yup.string()
+    .required("Please enter your password")
+    .min(6, "At least 6 characters"),
 });
 
 const SignUp: FC<Props> = ({ setOpen, setRoute }) => {
   const [show, setShow] = useState(false);
+  const [register, { isError, isSuccess, data, error, isLoading }] =
+    useRegisterMutation();
   const formik = useFormik({
     initialValues: { name: "", email: "", password: "" },
     validationSchema: schema,
-    onSubmit: ({ name, email, password }) => {
-      setRoute('verification');
+    onSubmit: async ({ name, email, password }) => {
+      const data = { name, email, password };
+      await register(data);
     },
   });
   const { errors, values, touched, handleChange, handleSubmit } = formik;
+
+  useEffect(() => {
+    if (isSuccess) {
+      const message = data?.message;
+      toast.success(message || "Registration successful.");
+      setRoute("verification");
+    }
+    if (error) {
+      if ("data" in error) {
+        const message = (error.data as any).message;
+        toast.error(message || "Something Wrong!");
+      }
+    }
+  }, [error, isSuccess]);
   return (
     <div className="w-full">
       <h1 className={styles.title}>Register As Member Of Msquare Community</h1>
@@ -53,7 +75,7 @@ const SignUp: FC<Props> = ({ setOpen, setRoute }) => {
             autoComplete="off"
           />
           {errors.name && touched.name && (
-            <span className="text-red-500 pt-2 block">{errors.email}</span>
+            <span className="text-red-500 pt-2 block">{errors.name}</span>
           )}
         </div>
         <div className={styles.inputHolder}>
@@ -70,7 +92,7 @@ const SignUp: FC<Props> = ({ setOpen, setRoute }) => {
             id="email"
             value={values.email}
             onChange={handleChange}
-            autoComplete="off"
+            // autoComplete="off"
           />
           {errors.email && touched.email && (
             <span className="text-red-500 pt-2 block">{errors.email}</span>
@@ -81,7 +103,7 @@ const SignUp: FC<Props> = ({ setOpen, setRoute }) => {
             Enter your password
           </label>
           <input
-            type="text"
+            type={show ? "text" : "password"}
             className={`${styles.input} ${
               errors.password && "border-red-500"
             } text-black dark:text-white font-Poppins`}
@@ -94,29 +116,42 @@ const SignUp: FC<Props> = ({ setOpen, setRoute }) => {
           />
           {show ? (
             <AiOutlineEye
-              className="absolute right-3 top-12"
+              className="absolute right-3 top-[52px]"
               onClick={() => setShow(false)}
             />
           ) : (
             <AiOutlineEyeInvisible
-              className="absolute right-3 top-12"
+              className="absolute right-3 top-[52px]"
               onClick={() => setShow(true)}
             />
           )}
           {errors.password && touched.password && (
-            <span className="text-red-500 pt-2 block">{errors.email}</span>
+            <span className="text-red-500 pt-2 block">{errors.password}</span>
           )}
         </div>
-        <div className={`${styles.button}`}>
-          <input type="submit" value="Sign Up" className="cursor-pointer" />
-        </div>
+        <button
+          type="submit"
+          onClick={() => handleSubmit}
+          className={`${styles.button} ${
+            isLoading ? "!bg-slate-500" : ""
+          } cursor-pointer z-[99999]`}
+        >
+          {isLoading ? (
+            <CircularProgress size={23} color="secondary" />
+          ) : (
+            "Submit"
+          )}
+        </button>
       </form>
-      <h5 className="text-center">Or Join With</h5>
+      <h5 className="text-center  text-black dark:text-white">Or Join With</h5>
       <div className="flex items-center justify-center my-4 gap-3">
-        <AiFillGithub size={35} className="cursor-pointer" />
+        <AiFillGithub
+          size={35}
+          className="cursor-pointer bg-black rounded-full"
+        />
         <FcGoogle size={35} className="cursor-pointer" />
       </div>
-      <h5 className="text-center font-Poppins font-[500]">
+      <h5 className="text-center font-Poppins font-[500] text-black dark:text-white">
         Already have an account ?{" "}
         <span
           className="text-sky-500 cursor-pointer"

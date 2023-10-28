@@ -6,9 +6,17 @@ import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import path from "path";
 import ejs from "ejs";
 import sendMail from "../utils/sendMail";
-import { accessCookieOptions,refreshCookieOption, sendToken } from "../utils/jwt";
+import {
+  accessCookieOptions,
+  refreshCookieOption,
+  sendToken,
+} from "../utils/jwt";
 import { redis } from "../utils/redis";
-import { changeUserRole, getAllUsersService, getUserWithId } from "../services/user.service";
+import {
+  changeUserRole,
+  getAllUsersService,
+  getUserWithId,
+} from "../services/user.service";
 import cloudinary from "cloudinary";
 import mongoose from "mongoose";
 interface User {
@@ -43,7 +51,7 @@ export const registerUser = catchAsyncErrors(
         path.join(__dirname, "..", "mails", "email.ejs"),
         data
       );
-      
+
       const options = {
         email: user.email,
         subject: "Account Activation",
@@ -67,7 +75,9 @@ export const registerUser = catchAsyncErrors(
 );
 
 export const getActivationCode = (user: User) => {
-  const activationCode = Math.floor(1000 * Math.random());
+  const min = 1000; // Minimum 4-digit number
+  const max = 9999; // Maximum 4-digit number
+  const activationCode = Math.floor(Math.random() * (max - min + 1) + min).toString();
   const token = jwt.sign(
     { user, activationCode },
     process.env.JWT_SECRET as Secret,
@@ -180,7 +190,7 @@ export const updateAccessToken = catchAsyncErrors(
       //check if refresh token is valid
       const valid = jwt.verify(
         refresh_token,
-        process.env.REFRESH_TOKEN || "",
+        process.env.REFRESH_TOKEN || ""
       ) as JwtPayload;
       if (!valid) {
         return next(new ErrorHandler("Refresh Token is not valid", 400));
@@ -192,19 +202,19 @@ export const updateAccessToken = catchAsyncErrors(
       }
       const user = JSON.parse(cachedUser as string);
       const access_token = jwt.sign(
-       {_id: user._id},
+        { _id: user._id },
         process.env.ACCESS_TOKEN as string,
-        {expiresIn:"1d"}
+        { expiresIn: "1d" }
       );
       //new refresh token | if don't want this need to create a endpoint for refresh token
       const refresh = jwt.sign(
-        {_id:user._id},
+        { _id: user._id },
         process.env.REFRESH_TOKEN || "",
         { expiresIn: "3d" }
       );
       res.cookie("access_token", access_token, accessCookieOptions);
       res.cookie("refresh_token", refresh, refreshCookieOption);
-      redis.set(user._id,JSON.stringify(user),"EX",604800);//update redis and expire in 7 days
+      redis.set(user._id, JSON.stringify(user), "EX", 604800); //update redis and expire in 7 days
       res.status(200).json({ access_token });
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 400));
@@ -357,44 +367,52 @@ export const updateProfilePicture = catchAsyncErrors(
     }
   }
 );
-//get all user 
-export const getAllUsers = catchAsyncErrors(async(req:Request,res:Response,next:NextFunction)=>{
-  try{
-    getAllUsersService(res)
-  }catch(err:any){
-    return next(new ErrorHandler(err.message,500))
+//get all user
+export const getAllUsers = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllUsersService(res);
+    } catch (err: any) {
+      return next(new ErrorHandler(err.message, 500));
+    }
   }
-})
+);
 
 //update user role -->admin role
-interface Role{
-  id:string;
-  role:string;
+interface Role {
+  id: string;
+  role: string;
 }
-export const updateUserRoleByAdmin= catchAsyncErrors(async(req:Request,res:Response,next:NextFunction)=>{
-  try{
-    const {id,role}:Role=req.body;
-    if(!id || !role){
-      return next(new ErrorHandler("Please provide all required fields",400))
+export const updateUserRoleByAdmin = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id, role }: Role = req.body;
+      if (!id || !role) {
+        return next(
+          new ErrorHandler("Please provide all required fields", 400)
+        );
+      }
+      changeUserRole(res, id, role);
+    } catch (err: any) {
+      return next(new ErrorHandler(err.message, 500));
     }
-    changeUserRole(res,id,role)
-  }catch(err:any){
-    return next(new ErrorHandler(err.message,500))
   }
-})
+);
 
 //delete user by admin
-export const deleteUser= catchAsyncErrors(async(req:Request,res:Response,next:NextFunction)=>{
-  try{
-    const id = req.params.id;
-    if(!id || !mongoose.Types.ObjectId.isValid(id)){
-      return next(new ErrorHandler("Please provide user id",400))
-    }
-    const user = await userModel.deleteOne({id});
-    await redis.del(id);
+export const deleteUser = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.id;
+      if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+        return next(new ErrorHandler("Please provide user id", 400));
+      }
+      const user = await userModel.deleteOne({ id });
+      await redis.del(id);
 
-    res.status(200).json({success:true,message:"User deleted"})
-  }catch(err:any){
-    return next(new ErrorHandler(err.message,500))
+      res.status(200).json({ success: true, message: "User deleted" });
+    } catch (err: any) {
+      return next(new ErrorHandler(err.message, 500));
+    }
   }
-})
+);
