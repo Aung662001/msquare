@@ -248,13 +248,14 @@ export const getUserById = catchAsyncErrors(
 //logint with social media
 export const socialAuth = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, email } = req.body;
-
+    const { name, email,avatar } = req.body;
     //validate required data
     if (!name || !email) {
       return next(new ErrorHandler("Please provide all required fields", 400));
     }
-
+    // const cloudData = await cloudinary.v2.uploader.upload(avatar, {
+    //   folder: "avatar",
+    // });
     try {
       // email already exist check
       const user = await userModel.findOne({ email });
@@ -263,7 +264,7 @@ export const socialAuth = catchAsyncErrors(
         sendToken(user, 200, res);
       } else {
         //user is not registered create new user and send access token
-        let newUser = await userModel.create({ name, email });
+        let newUser = await userModel.create({ name, email ,avatar});
         sendToken(newUser, 200, res);
       }
     } catch (err: any) {

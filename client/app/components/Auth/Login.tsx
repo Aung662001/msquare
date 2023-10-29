@@ -11,6 +11,7 @@ import { styles } from "@/app/styles/style";
 import { CircularProgress } from "@mui/material";
 import { useActivationMutation, useLoginMutation } from "@/redux/features/auth/authApiSlice";
 import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 type Props = {
   setRoute: (route: string) => void;
@@ -119,8 +120,8 @@ const Login: FC<Props> = ({setOpen,setRoute}) => {
       </form>
       <h5 className="text-center  text-black dark:text-white">Or Login With</h5>
       <div className="flex items-center justify-center my-4 gap-3">
-        <AiFillGithub size={35} className="cursor-pointer bg-black rounded-full " />
-        <FcGoogle size={35} className="cursor-pointer" />
+        <AiFillGithub size={35} className="cursor-pointer bg-black rounded-full " onClick={()=>signIn("github")}/>
+        <FcGoogle size={35} className="cursor-pointer" onClick={()=>signIn("google")}/>
       </div>
       <h5 className="text-center font-Poppins font-[500]  text-black dark:text-white">
         Not have an account ?{" "}

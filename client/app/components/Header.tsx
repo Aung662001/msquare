@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { FC, useState } from "react";
+import React, { FC, useState ,useEffect} from "react";
 import NavItems from "../utils/NavItems";
 import ThemeSwitcher from "../ThemeSwitcher";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
@@ -10,6 +10,9 @@ import SignUp from "../components/Auth/SignUp";
 import Verification from "../components/Auth/Verification";
 import Avatar from '@mui/material/Avatar';
 import { useSelector } from "react-redux";
+import {useSession} from "next-auth/react"
+import { useSocialAuthMutation } from "@/redux/features/auth/authApiSlice";
+import toast from "react-hot-toast";
 
 interface Props {
   open: boolean;
@@ -21,6 +24,8 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [route, setRoute] = useState("login");
+  const {data} = useSession();
+  const [socialAuth,{isSuccess,error}] = useSocialAuthMutation();
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -36,6 +41,22 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
       setOpenSidebar(false);
     }
   };
+  useEffect(() => {
+      if(!user){
+        if(data){
+          // {url:user.data?.image,public_id:Math.random()}
+          socialAuth({name:data.user?.name,email:data.user?.email,avatar:{url:data.user?.image,public_id:Math.random()}})
+        }
+      }
+      if(isSuccess){
+        toast.success("Login success")
+      }
+      if(error){
+        toast.error("Login error")
+      }
+  }, [error,data,isSuccess,user])
+  console.log(user)
+  console.log(data)
   return (
     <div className="w-full relative ">
       <div
@@ -67,8 +88,8 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
                 />
               </div>
               {/* profile */}
-                { user? user.avater?
-                 <Link href={"/profile"}><Avatar alt="Avater" src={user.avater} className="cursor-pointer"/></Link>:
+                { user? user.avatar?
+                 <Link href={"/profile"}><Avatar alt="Avater" src={user.avatar.url} className="cursor-pointer" sx={{width:30,height:30}}/></Link>:
                  <Link href="/profile"><Avatar sx={{width:30,height:30}} className="cursor-pointer"/></Link>:
                 (
                   <HiOutlineUserCircle
