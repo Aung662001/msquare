@@ -10,3 +10,9 @@ export const store = configureStore({
   devTools: false,
   middleware: (defaultMiddle) => defaultMiddle().concat(apiSlice.middleware),
 });
+
+const initiateApp =async ()=>{
+ await store.dispatch(apiSlice.endpoints.refreshToken.initiate({},{forceRefetch:true}));
+ await store.dispatch(apiSlice.endpoints.loadUser.initiate({},{forceRefetch:true}));
+}
+initiateApp();

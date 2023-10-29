@@ -12,6 +12,7 @@ import {
   updateProfilePicture,
   updateUserRoleByAdmin,
   deleteUser,
+  getLoginUserInfo,
 } from "../controllers/user.controller";
 import { isAuthenticated, accessedRole } from "../middleware/auth";
 import { getAllUsersService } from "../services/user.service";
@@ -28,7 +29,8 @@ router.post("/login", loginUser);
 
 //logout route
 router.get("/logout", isAuthenticated, logoutUser);
-
+//user info 
+router.get("/me",isAuthenticated,getLoginUserInfo)
 //refresh token
 router.get("/refresh", updateAccessToken);
 

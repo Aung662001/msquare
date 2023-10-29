@@ -221,6 +221,20 @@ export const updateAccessToken = catchAsyncErrors(
     }
   }
 );
+//get login user information
+export const getLoginUserInfo= catchAsyncErrors(async(req:Request,res:Response,next:NextFunction)=>{
+try{
+  const access_token = req.cookies.access_token;
+  const user = req.user
+  if(!user){
+    return next(new ErrorHandler("Please Login again", 400));
+  }
+  res.status(201).json({success:true,user,token:access_token})
+}catch(err:any){
+  next(new ErrorHandler(err.message,500));
+}
+
+})
 //get user by id
 export const getUserById = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {

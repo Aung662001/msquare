@@ -8,6 +8,8 @@ import CustomModal from "../utils/CustomModal";
 import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
 import Verification from "../components/Auth/Verification";
+import Avatar from '@mui/material/Avatar';
+import { useSelector } from "react-redux";
 
 interface Props {
   open: boolean;
@@ -15,6 +17,7 @@ interface Props {
   activeNumber: number;
 }
 const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
+  const {user} = useSelector((state:any)=>state.auth)
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [route, setRoute] = useState("login");
@@ -64,11 +67,17 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
                 />
               </div>
               {/* profile */}
-              <HiOutlineUserCircle
-                size={25}
-                onClick={() => setOpen(true)}
-                className="cursor-pointer mx-4 hidden 800px:block dark:text-white text-black"
-              />
+                { user? user.avater?
+                 <Link href={"/profile"}><Avatar alt="Avater" src={user.avater} className="cursor-pointer"/></Link>:
+                 <Link href="/profile"><Avatar sx={{width:30,height:30}} className="cursor-pointer"/></Link>:
+                (
+                  <HiOutlineUserCircle
+                  size={30}
+                  onClick={() => setOpen(true)}
+                  className="cursor-pointer  dark:text-white text-black mx-auto hover:scale-[1.3] transition-transform duration-300"
+                />
+                )
+                }
             </div>
           </div>
         </div>
@@ -81,13 +90,18 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
           >
             <div className="bg-white opacity-[0.9] z-50 dark:bg-gray-900 h-screen w-[70%] top-0 right-0 absolute border-l-2">
               <NavItems activeNumber={activeNumber} isMobile={true} />
-              <div className="w-full ">
-                {" "}
-                <HiOutlineUserCircle
+              <div className="w-full flex items-center justify-center">
+                {user? user.avater? 
+                 <Link href={"/profile"}><Avatar alt="Avater" src={user.avater} className="cursor-pointer"/></Link>:
+                 <Link href="/profile"><Avatar sx={{width:30,height:30}} className="cursor-pointer"/></Link>:
+                (
+                  <HiOutlineUserCircle
                   size={30}
                   onClick={() => setOpen(true)}
                   className="cursor-pointer  dark:text-white text-black mx-auto hover:scale-[1.3] transition-transform duration-300"
                 />
+                )
+                }
               </div>
             </div>
           </div>
