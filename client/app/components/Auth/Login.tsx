@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   AiOutlineEye,
   AiOutlineEyeInvisible,
@@ -9,7 +9,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { styles } from "@/app/styles/style";
 import { CircularProgress } from "@mui/material";
-import { useActivationMutation } from "@/redux/features/auth/authApiSlice";
+import { useActivationMutation, useLoginMutation } from "@/redux/features/auth/authApiSlice";
+import toast from "react-hot-toast";
 
 type Props = {
   setRoute: (route: string) => void;
@@ -25,15 +26,28 @@ const schema = Yup.object().shape({
 
 const Login: FC<Props> = ({setOpen,setRoute}) => {
   const [show, setShow] = useState(false);
+  const [login,{isSuccess,isError,error,data,isLoading}] = useLoginMutation();
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: schema,
     onSubmit: ({ email, password }) => {
-      console.log(email, password);
+      login({email,password})
     },
   });
   const { errors, values, touched, handleChange, handleSubmit } = formik;
 
+  useEffect(()=>{
+    if(isSuccess){
+      toast.success("Login success.")
+      setOpen(false)
+    }
+    if (error) {
+      if ("data" in error) {
+        const message = (error.data as any).message;
+        toast.error(message || "Something Wrong!");
+      }
+    }
+  },[error,isSuccess])
   return (
     <div className="w-full">
       <h1 className={styles.title}>Login To Msquare Community</h1>
@@ -90,13 +104,13 @@ const Login: FC<Props> = ({setOpen,setRoute}) => {
           )}
         </div>
         <button
-        type="submit"
+          type="submit"
           onClick={()=>handleSubmit}
           className={`${styles.button} ${
-            true ? "!bg-slate-500" : ""
+            isLoading ? "!bg-slate-500" : ""
           } cursor-pointer z-[99999]`}
         >
-          {true ? (
+          {isLoading ? (
             <CircularProgress size={23} color="secondary" />
           ) : (
             "Submit"
