@@ -1,14 +1,23 @@
-import React, { useState ,FC} from "react";
-import ProfileSideBar from "./ProfileSideBar"
+import React, { useState, FC } from "react";
+import ProfileSideBar from "./ProfileSideBar";
+import { useDispatch } from "react-redux";
+import { useLogoutQuery } from "@/redux/features/auth/authApiSlice";
+import { signOut } from "next-auth/react";
+import ProfileInfo from "./ProfileInfo";
 
 type Props = {
   user: any;
 };
 
-const Profile:FC<Props> = ({ user }) => {
+const Profile: FC<Props> = ({ user }) => {
+  const dispatch = useDispatch();
   const [scroll, setScroll] = useState(false);
-  const [active,setActive] = useState(1);
-  const [avatar,setAvater] = useState(user.avatar.url || null)
+  const [active, setActive] = useState(1);
+  const [avatar, setAvater] = useState(user.avatar.url || null);
+  const [logout, setLogout] = useState(false);
+  useLogoutQuery(undefined, {
+    skip: logout,
+  });
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -19,7 +28,10 @@ const Profile:FC<Props> = ({ user }) => {
       }
     });
   }
-  const logoutHandler = () =>{}
+  const logoutHandler = () => {
+    setLogout(true);
+    signOut();
+  };
   return (
     <div className="w-[85%] flex mx-auto">
       <div
@@ -27,14 +39,15 @@ const Profile:FC<Props> = ({ user }) => {
           scroll ? "top-120px" : "top-[30px"
         } left-[30px]`}
       >
-        <ProfileSideBar 
-        user={user}
-        active={active}
-        setActive={setActive}
-        avatar={avatar}
-        logoutHandler={logoutHandler}
+        <ProfileSideBar
+          user={user}
+          active={active}
+          setActive={setActive}
+          avatar={avatar}
+          logoutHandler={logoutHandler}
         />
       </div>
+      {active == 1 && <ProfileInfo />}
     </div>
   );
 };

@@ -28,7 +28,7 @@ export const apiSlice = createApi({
                      user:result.data.user
                  }))
              }catch(err:any){
-                 console.log(err.message);
+                 console.log(err);
              }
             }
         })

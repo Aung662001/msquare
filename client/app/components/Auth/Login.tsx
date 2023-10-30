@@ -9,7 +9,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { styles } from "@/app/styles/style";
 import { CircularProgress } from "@mui/material";
-import { useActivationMutation, useLoginMutation } from "@/redux/features/auth/authApiSlice";
+import { useLoginMutation } from "@/redux/features/auth/authApiSlice";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 
