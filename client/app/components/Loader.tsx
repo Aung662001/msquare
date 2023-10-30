@@ -1,0 +1,33 @@
+"use client";
+import { Box, CircularProgress } from '@mui/material';
+import React,{FC} from 'react';
+import  {
+    circularProgressClasses,
+  } from '@mui/material/CircularProgress';
+
+type Props = {
+
+}
+
+const Loader:FC<Props> = () => {
+  return (
+    <Box sx={{ position: 'relative' }} className={`w-full h-full flex items-center justify-center`}>
+    <CircularProgress
+      variant="indeterminate"
+      disableShrink
+      sx={{
+        color: (theme) => (theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8'),
+        animationDuration: '550ms',
+        position: 'absolute',
+        [`& .${circularProgressClasses.circle}`]: {
+          strokeLinecap: 'round',
+        },
+      }}
+      size={40}
+      thickness={4}
+    />
+  </Box>
+  )
+}
+
+export default Loader;

@@ -1,5 +1,4 @@
 "use client";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Poppins } from "next/font/google";
@@ -8,6 +7,10 @@ import { ThemeProvider } from "./utils/theme_provider";
 import { Toaster } from "react-hot-toast";
 import Providers from "./Provider";
 import { SessionProvider } from "next-auth/react";
+import { ReactNode, FC } from "react";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import Loader from "./components/Loader";
+import { CircularProgress } from "@mui/material";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -42,6 +45,7 @@ export default function RootLayout({
         <Providers>
           <SessionProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              {/* <Custom>{children}</Custom> */}
               {children}
               <Toaster position="top-center" />
             </ThemeProvider>
@@ -51,3 +55,12 @@ export default function RootLayout({
     </html>
   );
 }
+const Custom: FC<{ children: ReactNode }> = ({ children }) => {
+  const { isLoading } = useLoadUserQuery({});
+  if (typeof window == "undefined") return null;
+  return (
+    <div className={`dark:bg-black w-screen h-screen`}>
+      {isLoading ? <CircularProgress /> : <div>{children}</div>}
+    </div>
+  );
+};

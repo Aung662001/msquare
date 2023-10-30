@@ -48,16 +48,17 @@ body {
   color: red;
   position: relative;
 }
-.msquare::before{
-  content:"|";
-  color: transparent;
-  /* box-shadow: 5px 5px 20px black; */
+.msquare::after{
+  content:"";
+   /* box-shadow: 5px 5px 20px black;  */
   width: 100%;
-  height: 140%;
+  height: 100%;
+  border-left: 1px solid red;
   position:absolute;
   right: 0;
+  top: 0;
   animation:msquare 2s linear alternate infinite ;
-  animation-delay: 2s;
+  animation-delay: 2s; 
 }
 @keyframes change {
   0%   {text-shadow:-3px 0px 25px rgb(119, 152, 119)}
@@ -89,17 +90,27 @@ body {
   100% {text-shadow:-3px 0px 25px rgb(6, 3, 98)}
 }
 @keyframes msquare {
-  0%   {width: 100%;color: red;}
-  12% {color:transparent}
-  25%  {width: 75%;color: red;}
+  0%   {width: 100%;}
+  /* 12% {border:none} */
+  25%  {width: 75%}
+  /* 37% {border:none} */
+  50%  {width: 50%;}
+  /* 62% {cborder:none;} */
+  75%  {width: 25%;}
+  /* 87% {border:none} */
+  100% {width: 0%;}
+}
+/* @keyframes msquare {
+  0%   {content:""}
+  12% {content: "m";}
+  25%  {content: "ms";}
   37% {color:transparent}
   50%  {width: 50%;color: red;}
   62% {color: transparent;}
   75%  {width: 25%;color:red}
   87% {color:transparent}
   100% {width: 0%;color: red;}
-}
-
+} */
 .shake{
   animation:shake 0.5s ease-in-out ;
 }

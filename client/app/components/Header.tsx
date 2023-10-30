@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { FC, useState ,useEffect} from "react";
+import React, { FC, useState, useEffect } from "react";
 import NavItems from "../utils/NavItems";
 import ThemeSwitcher from "../ThemeSwitcher";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
@@ -8,9 +8,9 @@ import CustomModal from "../utils/CustomModal";
 import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
 import Verification from "../components/Auth/Verification";
-import Avatar from '@mui/material/Avatar';
+import Avatar from "@mui/material/Avatar";
 import { useSelector } from "react-redux";
-import {useSession} from "next-auth/react"
+import { useSession } from "next-auth/react";
 import { useSocialAuthMutation } from "@/redux/features/auth/authApiSlice";
 import toast from "react-hot-toast";
 
@@ -20,12 +20,12 @@ interface Props {
   activeNumber: number;
 }
 const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
-  const {user} = useSelector((state:any)=>state.auth)
+  const { user } = useSelector((state: any) => state.auth);
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [route, setRoute] = useState("login");
-  const {data} = useSession();
-  const [socialAuth,{isSuccess,error}] = useSocialAuthMutation();
+  const { data } = useSession();
+  const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -42,28 +42,31 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
     }
   };
   useEffect(() => {
-      if(!user){
-        if(data){
-          // {url:user.data?.image,public_id:Math.random()}
-          socialAuth({name:data.user?.name,email:data.user?.email,avatar:{url:data.user?.image,public_id:Math.random()}})
-        }
+    if (!user) {
+      if (data) {
+        // {url:user.data?.image,public_id:Math.random()}
+        socialAuth({
+          name: data.user?.name,
+          email: data.user?.email,
+          avatar: { url: data.user?.image, public_id: Math.random() },
+        });
       }
-      if(isSuccess){
-        toast.success("Login success")
-      }
-      if(error){
-        toast.error("Login error")
-      }
-  }, [error,data,isSuccess,user])
-  console.log(user)
-  console.log(data)
+    }
+    if (isSuccess) {
+      toast.success("Login success");
+    }
+    if (error) {
+      toast.error("Login error");
+    }
+  }, [error, data, isSuccess, user]);
+
   return (
-    <div className="w-full relative ">
+    <div className="w-full h-[80px] relative ">
       <div
         className={`${
           true
             ? "dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-grey-700 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffffc1] shadow-xl transition-all duration-700"
-            : "w-full border-b-2 dark:border-[#ffffff1c] h-[80px] z-[80] dark:shadow-sm"
+            : "w-full border-b-2 dark:border-[#ffffff1c]  z-[80] dark:shadow-sm"
         }`}
       >
         <div className="w-[95%] 800px:w-[92%] m-auto py-2 h-full">
@@ -88,17 +91,31 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
                 />
               </div>
               {/* profile */}
-                { user? user.avatar?
-                 <Link href={"/profile"}><Avatar alt="Avater" src={user.avatar.url} className="cursor-pointer" sx={{width:30,height:30}}/></Link>:
-                 <Link href="/profile"><Avatar sx={{width:30,height:30}} className="cursor-pointer"/></Link>:
-                (
-                  <HiOutlineUserCircle
+              {user ? (
+                user.avatar ? (
+                  <Link href={"/profile"}>
+                    <Avatar
+                      alt="Avater"
+                      src={user.avatar.url}
+                      className="cursor-pointer"
+                      sx={{ width: 30, height: 30 }}
+                    />
+                  </Link>
+                ) : (
+                  <Link href="/profile">
+                    <Avatar
+                      sx={{ width: 30, height: 30 }}
+                      className="cursor-pointer"
+                    />
+                  </Link>
+                )
+              ) : (
+                <HiOutlineUserCircle
                   size={30}
                   onClick={() => setOpen(true)}
                   className="cursor-pointer  dark:text-white text-black mx-auto hover:scale-[1.3] transition-transform duration-300"
                 />
-                )
-                }
+              )}
             </div>
           </div>
         </div>
@@ -112,24 +129,36 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
             <div className="bg-white opacity-[0.9] z-50 dark:bg-gray-900 h-screen w-[70%] top-0 right-0 absolute border-l-2">
               <NavItems activeNumber={activeNumber} isMobile={true} />
               <div className="w-full flex items-center justify-center">
-                {user? user.avater? 
-                 <Link href={"/profile"}><Avatar alt="Avater" src={user.avater} className="cursor-pointer"/></Link>:
-                 <Link href="/profile"><Avatar sx={{width:30,height:30}} className="cursor-pointer"/></Link>:
-                (
+                {user ? (
+                  user.avater ? (
+                    <Link href={"/profile"}>
+                      <Avatar
+                        alt="Avater"
+                        src={user.avater}
+                        className="cursor-pointer"
+                      />
+                    </Link>
+                  ) : (
+                    <Link href="/profile">
+                      <Avatar
+                        sx={{ width: 30, height: 30 }}
+                        className="cursor-pointer"
+                      />
+                    </Link>
+                  )
+                ) : (
                   <HiOutlineUserCircle
-                  size={30}
-                  onClick={() => setOpen(true)}
-                  className="cursor-pointer  dark:text-white text-black mx-auto hover:scale-[1.3] transition-transform duration-300"
-                />
-                )
-                }
+                    size={30}
+                    onClick={() => setOpen(true)}
+                    className="cursor-pointer  dark:text-white text-black mx-auto hover:scale-[1.3] transition-transform duration-300"
+                  />
+                )}
               </div>
             </div>
           </div>
         )}
       </div>
-      {
-         route == "login" && (
+      {route == "login" && (
         <>
           {open && (
             <CustomModal
@@ -141,10 +170,8 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
             />
           )}
         </>
-         )
-      }
-      {
-         route == "sign-up" && (
+      )}
+      {route == "sign-up" && (
         <>
           {open && (
             <CustomModal
@@ -156,10 +183,8 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
             />
           )}
         </>
-         )
-      }
-       {
-         route == "verification" && (
+      )}
+      {route == "verification" && (
         <>
           {open && (
             <CustomModal
@@ -171,8 +196,7 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
             />
           )}
         </>
-         )
-      }
+      )}
     </div>
   );
 };

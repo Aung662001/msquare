@@ -23,7 +23,7 @@ const Hero = () => {
           text-[18px] font-[400] 900px:text-[20px] 900px:font-[500]
           ">
             1000+ students are building their future at{" "}
-            <span className="msquare dark:before:bg-black dark:shadow-[5px 5px 20px black] before:bg-white">msquare!</span>
+            <span className="msquare dark:after:bg-[#070A11] dark:shadow-[5px 5px 20px black] after:bg-white">msquare!</span>
           </p>
         </div>
       </div>
