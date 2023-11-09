@@ -18,8 +18,9 @@ interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   activeNumber: number;
+  setActiveNumber: (activeNumber: number) => void;
 }
-const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
+const Header: FC<Props> = ({ setActiveNumber,activeNumber, open, setOpen }) => {
   const { user } = useSelector((state: any) => state.auth);
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -93,12 +94,13 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
               {/* profile */}
               {user ? (
                 user.avatar ? (
-                  <Link href={"/profile"}>
+                  <Link href={"/profile"} >
                     <Avatar
                       alt="Avater"
                       src={user.avatar.url}
                       className="cursor-pointer"
                       sx={{ width: 30, height: 30 }}
+                      style={{border:activeNumber === 5?"2px solid green":""}}
                     />
                   </Link>
                 ) : (
@@ -106,6 +108,7 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
                     <Avatar
                       sx={{ width: 30, height: 30 }}
                       className="cursor-pointer"
+                      style={{border:activeNumber === 5?"2px solid green":""}}
                     />
                   </Link>
                 )
@@ -130,12 +133,13 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
               <NavItems activeNumber={activeNumber} isMobile={true} />
               <div className="w-full flex items-center justify-center">
                 {user ? (
-                  user.avater ? (
+                  user.avatar ? (
                     <Link href={"/profile"}>
                       <Avatar
                         alt="Avater"
-                        src={user.avater}
+                        src={user.avatar.url}
                         className="cursor-pointer"
+                        style={{border:activeNumber === 5?"2px solid green":""}}
                       />
                     </Link>
                   ) : (
@@ -143,6 +147,7 @@ const Header: FC<Props> = ({ activeNumber, open, setOpen }) => {
                       <Avatar
                         sx={{ width: 30, height: 30 }}
                         className="cursor-pointer"
+                        style={{border:activeNumber === 5?"2px solid green":""}}
                       />
                     </Link>
                   )

@@ -9,7 +9,7 @@ type Props = {};
 
 const page = (props: Props) => {
   const [open, setOpen] = useState(false);
-  const [activeNumber, setActiveNumber] = useState(0);
+  const [activeNumber, setActiveNumber] = useState(5);
   const {user} = useSelector((state:any)=>(state.auth))
   return (
     <Protected>
@@ -18,7 +18,7 @@ const page = (props: Props) => {
         description="You want, you try"
         keywords="learning,programming,msquare,react,nextjs,mysql"
       />
-      <Header open={open} setOpen={setOpen} activeNumber={activeNumber} />
+      <Header open={open} setOpen={setOpen} activeNumber={activeNumber} setActiveNumber={setActiveNumber}/>
       <Profile user={user}/>
     </Protected>
   );

@@ -55,12 +55,4 @@ export default function RootLayout({
     </html>
   );
 }
-const Custom: FC<{ children: ReactNode }> = ({ children }) => {
-  const { isLoading } = useLoadUserQuery({});
-  if (typeof window == "undefined") return null;
-  return (
-    <div className={`dark:bg-black w-screen h-screen`}>
-      {isLoading ? <CircularProgress /> : <div>{children}</div>}
-    </div>
-  );
-};
+

@@ -41,7 +41,7 @@ router.get("/user/:id", isAuthenticated, getUserById);
 router.post("/social-auth", socialAuth);
 
 //update user informations
-router.post("/user/update", isAuthenticated, updateUser);
+router.put("/user/update", isAuthenticated, updateUser);
 
 //update user password
 router.put("/update-user-password", isAuthenticated, updateUserPassword);

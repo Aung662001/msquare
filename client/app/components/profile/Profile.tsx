@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useLogoutQuery } from "@/redux/features/auth/authApiSlice";
 import { signOut } from "next-auth/react";
 import ProfileInfo from "./ProfileInfo";
+import ChangePassword from "./ChangePassword";
 
 type Props = {
   user: any;
@@ -48,6 +49,7 @@ const Profile: FC<Props> = ({ user }) => {
         />
       </div>
       {active == 1 && <ProfileInfo />}
+      {active == 2 && <ChangePassword />}
     </div>
   );
 };

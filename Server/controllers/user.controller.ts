@@ -332,7 +332,7 @@ export const updateUserPassword = catchAsyncErrors(
 
       //social user that does not exist password
       if (user?.password == undefined) {
-        return next(new ErrorHandler("Unvalid user", 400));
+        return next(new ErrorHandler("No need to change your password", 400));
       }
       const matchPassword = await user.comparePassword(oldPassword);
       if (matchPassword) {

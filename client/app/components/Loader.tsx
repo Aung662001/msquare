@@ -11,7 +11,7 @@ type Props = {
 
 const Loader:FC<Props> = () => {
   return (
-    <Box sx={{ position: 'relative' }} className={`w-full h-full flex items-center justify-center`}>
+    <div style={{ position: 'relative' }} className={`w-full h-full flex items-center justify-center`}>
     <CircularProgress
       variant="indeterminate"
       disableShrink
@@ -26,7 +26,7 @@ const Loader:FC<Props> = () => {
       size={40}
       thickness={4}
     />
-  </Box>
+  </div>
   )
 }
 
