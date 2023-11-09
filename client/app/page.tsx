@@ -11,9 +11,9 @@ interface Props {}
 
 const Page: FC<Props> = (props) => {
   const {user } = useSelector((state:any)=>(state.auth))
-  if(user){
-    redirect("/profile")
-  }
+  // if(user){
+  //   redirect("/profile")
+  // }
   const [open, setOpen] = useState(false);
   const [activeNumber, setActiveNumber] = useState(0);
   return (

@@ -352,6 +352,7 @@ export const updateUserPassword = catchAsyncErrors(
 //change avater
 export const updateProfilePicture = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body);
     const { avatar } = req.body;
     const userId = req.user?._id;
     //data validation

@@ -19,6 +19,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
   const {token} = useSelector((state:any)=>state.auth)
   const [InvalidNumbers, setInvalidNumbers] = useState(false);
   const [activation,{isError,isSuccess,isLoading,error,data}]= useActivationMutation();
+  const submitBtnRef= useRef<HTMLInputElement>(null);
   const inputRef = [
     useRef<HTMLInputElement>(null),
     useRef<HTMLInputElement>(null),
@@ -52,6 +53,8 @@ const Verification: FC<Props> = ({ setRoute }) => {
       inputRef[index - 1].current?.focus();
     } else if (value.length == 1 && index < 3) {
       inputRef[index + 1].current?.focus();
+    }else if(index =3){
+      submitBtnRef.current?.click()
     }
   };
   useEffect(() => {
@@ -99,7 +102,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
             />
           ))}
         </div>
-        <input type="submit" value={"Verify OPT"} className={styles.button} />
+        <input type="submit" value={"Verify OPT"} className={styles.button} ref={submitBtnRef} />
       </form>
       <h5 className="text-center font-Poppins font-[500] text-black dark:text-white">
         Go Back to{" "}
