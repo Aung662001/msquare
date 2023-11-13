@@ -14,8 +14,8 @@ const Profile: FC<Props> = ({ user }) => {
   const dispatch = useDispatch();
   const [scroll, setScroll] = useState(false);
   const [active, setActive] = useState(1);
-  const [avatar, setAvater] = useState(user.avatar.url || null);
-  const [logout, setLogout] = useState(false);
+  const [avatar, setAvater] = useState(user.avatar?.url || null);
+  const [logout, setLogout] = useState(true);
   useLogoutQuery(undefined, {
     skip: logout,
   });
@@ -30,7 +30,7 @@ const Profile: FC<Props> = ({ user }) => {
     });
   }
   const logoutHandler = () => {
-    setLogout(true);
+    setLogout(false);
     signOut();
   };
   return (

@@ -4,7 +4,6 @@ import { useUpdatePasswordMutation } from "@/redux/features/user/userApiSlice";
 import toast from "react-hot-toast";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 type Props = {};
-
 const ChangePassword = (props: Props) => {
     const [show ,setShow] = useState(false)
     const [updatePassword,{error,isSuccess}] = useUpdatePasswordMutation();
@@ -25,8 +24,7 @@ const ChangePassword = (props: Props) => {
                 toast.success("Password updated successfully");
             }
             if(error){
-                toast.error("Error updating password");
-                console.log(error)
+                toast.error("Password update failed");
             }
             let index = confgPassword.length-1;
             if(confgPassword.charAt(index) !== newPassword.charAt(index)){

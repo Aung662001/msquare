@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { useUpdateProfileImageMutation, useUpdateProfileMutation } from '@/redux/features/user/userApiSlice'
 import { useLoadUserQuery } from '@/redux/features/api/apiSlice'
 import toast from 'react-hot-toast'
+import Loader from '../Loader'
 
 type Props = {}
 export const styles= {
@@ -15,7 +16,7 @@ export const styles= {
 }
 const ProfileInfo = (props: Props) => {
     const {user} = useSelector((state:any)=>(state.auth))
-    const [updateProfileImage,{isSuccess,error}] = useUpdateProfileImageMutation();
+    const [updateProfileImage,{isSuccess,error,isLoading}] = useUpdateProfileImageMutation();
     const [updateProfile,{isError,isSuccess:success}]= useUpdateProfileMutation();
     const [name,setName] = useState(user.name || "");
     const [email,setEmail] = useState(user.email || "");
@@ -51,20 +52,21 @@ const ProfileInfo = (props: Props) => {
             toast.error("Failed to update")
         }
     },[isSuccess,success,error,isError])
+
   return (
     <div className='h-[450px] ms-9  w-full  border-gray-300  rounded-sm  mt-[80px] mb-[80px] grid grid-cols-1 800px:grid-cols-2 justify-items-center auto-rows-max gap-5 border-0'>
        <div className="800px:col-span-2 m-auto relative" >
         {
-            user && user.avatar && user.avatar.url ? <Avatar sx={{ width: 100, height: 100 }} src={user.avatar.url} />:<Avatar/>
+           isLoading?<Loader/>: user && user.avatar && user.avatar.url ? <Avatar sx={{ width: 100, height: 100 }} src={user.avatar.url} />:<Avatar/>
         }
-        <span>
+        {!isLoading && <span>
             <input type="file" className='hidden' id='avatar' name='avatar' onChange={imageHandler} accept='image/png,image/jpg,image/jpeg,image/wepg'/>
             <label htmlFor='avatar'>
                 <div className='cursor-pointer absolute bottom-0 right-0'>
                     <AiOutlineCamera/>
                 </div>
             </label>
-        </span>
+        </span>}
         </div>
         <div className='h-24 w-full'>
             <label htmlFor="name"  className={`${styles.label} name `}>Full Name</label><br/>

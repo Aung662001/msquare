@@ -14,7 +14,7 @@ const page = (props: Props) => {
   return (
     <Protected>
       <Heading
-        title={`${user.name}'s profile`}
+        title={`${user.name}'s profile - MSQUARE`}
         description="You want, you try"
         keywords="learning,programming,msquare,react,nextjs,mysql"
       />

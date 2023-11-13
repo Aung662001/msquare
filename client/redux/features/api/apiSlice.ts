@@ -18,7 +18,7 @@ export const apiSlice = createApi({
             query:()=>({
                 url:"me",
                 method:"GET",
-                credentials:"include",
+                credentials:"include" as const,
             }),
             async onQueryStarted(arg,{dispatch,queryFulfilled}){
                 try{

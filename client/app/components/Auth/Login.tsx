@@ -78,7 +78,7 @@ const Login: FC<Props> = ({setOpen,setRoute}) => {
             Enter your password
           </label>
           <input
-            type={show ? "password" : "text"}
+            type={!show ? "password" : "text"}
             className={`${styles.input} ${
               errors.password && "border-red-500"
             } text-black dark:text-white font-Poppins`}
@@ -93,11 +93,11 @@ const Login: FC<Props> = ({setOpen,setRoute}) => {
             <AiOutlineEye
               className="absolute right-3 top-[52px]"
               onClick={() => setShow(false)}
-            />
-          ) : (
-            <AiOutlineEyeInvisible
-              className="absolute right-3 top-[52px]"
-              onClick={() => setShow(true)}
+              />
+              ) : (
+                <AiOutlineEyeInvisible
+                className="absolute right-3 top-[52px]"
+                onClick={() => setShow(true)}
             />
           )}
           {errors.password && touched.password && (
