@@ -28,23 +28,24 @@ import { useSelector } from "react-redux";
 
 type Props = {
   title: string;
+  hoverText: string;
   to: string;
   icon: JSX.Element;
   selected: string;
   setSelected: (selected: string) => void;
 };
 
-const Item = ({ title, to, icon, selected, setSelected }: Props) => {
+const Item = ({ title, to, icon, selected, setSelected,hoverText }: Props) => {
   return (
+    <Link href={to} title={hoverText}>
       <MenuItem
         onClick={() => setSelected(title)}
         active={selected == title}
         icon={icon}
       >
         <Typography className="!text-[16px] !font-Poppins">{title}</Typography>
-    <Link href={to}>
-    </Link>
       </MenuItem>
+    </Link>
   );
 };
 const SideBar = () => {
@@ -55,10 +56,13 @@ const SideBar = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true)
+    document.documentElement.clientWidth < 900 && setIsCollapsed(true) 
+  }, []);
   if (!mounted) return null;
   const logoutHandler = () => setLogout(true);
-
+  
   return (
     <Box
       sx={{
@@ -79,6 +83,9 @@ const SideBar = () => {
         "& .pro-inner-item": {
           padding: "5px 35px 5px 20px !important",
           opacity: 1,
+          display: "flex",
+          alignItems: "flex-start",
+          gap: "10px",
         },
         "& .pro-menu-item": {
           color: `${theme !== "dark" && "#000"}`,
@@ -90,10 +97,12 @@ const SideBar = () => {
         collapsed={isCollapsed}
         style={{
           position: "fixed",
+          overflowY:!isCollapsed?"scroll":"hidden",
+          overflowX:"hidden",
           top: 0,
           left: 0,
-          height: "100vh",
-          width: isCollapsed ? "0%" : "18%",
+          height: "100%",
+          width: isCollapsed ? "60px" : "210px",
         }}
       >
         <Menu iconShape="square">
@@ -117,6 +126,7 @@ const SideBar = () => {
                 <IconButton
                   onClick={() => setIsCollapsed(!isCollapsed)}
                   className="inline-block"
+                  style={{marginLeft:"20px"}}
                 >
                   <ArrowBackIos className="dark:text-white text-black" />
                 </IconButton>
@@ -126,38 +136,41 @@ const SideBar = () => {
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
-                {/* <Image
+                <Image
                   alt="user-pf-img"
                   width={100}
                   height={100}
-                  src={user?.avatar ? user.avatar : "../../Route/msquare.jpg"}
+                  src={
+                    user?.avatar ? user.avatar.url : "../../Route/msquare.jpg"
+                  }
                   style={{
                     cursor: "pointer",
-                    borderRadius: "50%",
+                    // borderRadius: "100%",
                     border: "3px solid #5b6fe6",
                   }}
-                /> */}
+                />
               </Box>
               <Box textAlign="center">
                 <Typography
                   variant="h4"
-                  className="!text-[20px] text-black dark:text-white m-[10px]"
+                  className="!text-[16px] text-black dark:text-white m-[10px]"
                 >
                   {user?.name}
                 </Typography>
                 <Typography
                   variant="h6"
                   sx={{ m: "10px 0 0 0" }}
-                  className="!text-[20px] text-black dark:text-white capitalize"
+                  className="!text-[16px] text-black dark:text-white capitalize"
                 >
                   -{user?.role}
                 </Typography>
               </Box>
             </Box>
           )}
-          <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+          <Box paddingLeft={isCollapsed ? undefined : "10%"} >
             <Item
-              title="Dashboard"
+              title={isCollapsed ?"":"Dashboard"}
+              hoverText={!isCollapsed ?"":"Dashboard"}
               to="/admin"
               icon={<HomeOutlined />}
               selected={selected}
@@ -165,20 +178,22 @@ const SideBar = () => {
             />
             <Typography
               variant="h5"
-              sx={{ m: "15px 0 5px 25px" }}
+              sx={{ m: "15px 0 5px 10px" }}
               className="!text-[18px] text-black dark:text-white capitalize !font-[400]"
             >
               {!isCollapsed && "Data"}
             </Typography>
             <Item
-              title="Users"
+              hoverText={!isCollapsed ?"":"Users"}
+              title={isCollapsed ?"":"Users"}
               to="/admin/users"
               icon={<Groups />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Invoices"
+              hoverText={!isCollapsed ?"":"Invoices"}
+              title={isCollapsed ?"":"Invoices"}
               to="/admin/invoices"
               icon={<ReceiptOutlined />}
               selected={selected}
@@ -187,19 +202,21 @@ const SideBar = () => {
             <Typography
               variant="h5"
               className="!text-[18px] text-black dark:text-white capitalize !font-[400]"
-              sx={{ m: "15px 0 5px 20px" }}
+              sx={{ m: "15px 0 5px 10px" }}
             >
               {!isCollapsed && "Content"}
             </Typography>
             <Item
-              title="Create Courses"
+              hoverText={!isCollapsed ?"":"Create Courses"}
+              title={isCollapsed ?"":"Create Courses"}
               to="/admin/create-courses"
               icon={<VideoCall />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Live Courses"
+              hoverText={!isCollapsed ?"":"Live Courses"}
+              title={isCollapsed ?"":"Live Courses"}
               to="/admin/courses"
               icon={<OndemandVideo />}
               selected={selected}
@@ -208,26 +225,29 @@ const SideBar = () => {
             <Typography
               variant="h5"
               className="!text-[18px] text-black dark:text-white capitalize !font-[400]"
-              sx={{ m: "15px 0 5px 20px" }}
+              sx={{ m: "15px 0 5px 10px" }}
             >
               {!isCollapsed && "Customizations"}
             </Typography>
             <Item
-              title="Hero"
+              hoverText={!isCollapsed ?"":"Hero"}
+              title={isCollapsed ?"":"Hero"}
               to="/admin/hero"
               icon={<Web />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="FAQ"
+              hoverText={!isCollapsed ?"":"FAQ"}
+              title={isCollapsed ?"":"FAQ"}
               to="/faq"
               icon={<Quiz />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Categories"
+              hoverText={!isCollapsed ?"":"Categories"}
+              title={isCollapsed ?"":"Categories"}
               to="/admin/categories"
               icon={<Wysiwyg />}
               selected={selected}
@@ -236,12 +256,13 @@ const SideBar = () => {
             <Typography
               variant="h5"
               className="!text-[18px] text-black dark:text-white capitalize !font-[400]"
-              sx={{ m: "15px 0 5px 20px" }}
+              sx={{ m: "15px 0 5px 10px" }}
             >
               {!isCollapsed && "Controllers"}
             </Typography>
             <Item
-              title="Manage Team"
+              title={isCollapsed ?"":"Manage Team"}
+              hoverText={!isCollapsed ?"":"Manage Team"}
               to="/admin/team"
               icon={<PeopleOutline />}
               selected={selected}
@@ -250,26 +271,29 @@ const SideBar = () => {
             <Typography
               variant="h5"
               className="!text-[18px] text-black dark:text-white capitalize !font-[400]"
-              sx={{ m: "15px 0 5px 20px" }}
+              sx={{ m: "15px 0 5px 10px" }}
             >
               {!isCollapsed && "Analytics"}
             </Typography>
             <Item
-              title="Courses Analytics"
+              hoverText={!isCollapsed ?"":"Courses Analytics"}
+              title={isCollapsed ?"":"Courses Analytics"}
               to="/admin/courses-analytics"
               icon={<BarChartOutlined />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Orders Analytics"
+              hoverText={!isCollapsed ?"":"Orders Analytics"}
+              title={isCollapsed ?"":"Orders Analytics"}
               to="/admin/orders-analytics"
               icon={<MapOutlined />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Users Analytics"
+              hoverText={!isCollapsed ?"":"Users Analytics"}
+              title={isCollapsed ?"":"Users Analytics"}
               to="/admin/users-analytics"
               icon={<ManageHistory />}
               selected={selected}
@@ -278,12 +302,13 @@ const SideBar = () => {
             <Typography
               variant="h5"
               className="!text-[18px] text-black dark:text-white capitalize !font-[400]"
-              sx={{ m: "15px 0 5px 20px" }}
+              sx={{ m: "15px 0 5px 10px" }}
             >
               {!isCollapsed && "Extras"}
             </Typography>
             <Item
-              title="Settings"
+              hoverText={!isCollapsed ?"":"Settings"}
+              title={isCollapsed ?"":"Settings"}
               to="/admin/settings"
               icon={<Settings />}
               selected={selected}
@@ -291,7 +316,8 @@ const SideBar = () => {
             />
             <div onClick={logoutHandler}>
               <Item
-                title="Logout"
+              hoverText={!isCollapsed ?"":"Home"}
+              title={isCollapsed ?"":"Home"}
                 to="/"
                 icon={<ExitToApp />}
                 selected={selected}

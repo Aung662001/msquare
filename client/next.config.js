@@ -10,6 +10,9 @@ const nextConfig = {
             pathname: '/account123/**',
           },
         ],
+        domains:[
+          'res.cloudinary.com',
+        ]
       },
 }
 

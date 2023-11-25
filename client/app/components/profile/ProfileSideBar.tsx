@@ -15,7 +15,7 @@ type Props = {
   avatar: string | null;
   logoutHandler: () => void;
 };
-export const styles = {
+ const styles = {
   h5: "ms-2 font-Poppins dark:font-[600] font-[700] dark:text-white text-black hidden 800px:block",
   icon:"text-black dark:text-white",
   navItem:"cursor-pointer w-full h-[60px] flex items-center 800px:ps-4 ps-2 hover:scale-105 transition-all rounded-sm"

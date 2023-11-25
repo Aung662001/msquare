@@ -7,12 +7,8 @@ import { ThemeProvider } from "./utils/theme_provider";
 import { Toaster } from "react-hot-toast";
 import Providers from "./Provider";
 import { SessionProvider } from "next-auth/react";
-import { ReactNode, FC } from "react";
-import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
-import Loader from "./components/Loader";
-import { CircularProgress } from "@mui/material";
+import { useEffect, useState } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -30,6 +26,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en">
       <body
@@ -46,7 +43,7 @@ export default function RootLayout({
           <SessionProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {/* <Custom>{children}</Custom> */}
-              {children}
+              { children}
               <Toaster position="top-center" />
             </ThemeProvider>
           </SessionProvider>

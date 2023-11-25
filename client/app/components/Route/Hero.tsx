@@ -2,7 +2,7 @@ import React from "react";
 
 const Hero = () => {
   return (
-    <div className="w-full h-screen flex items-center justify-center">
+    <div className="w-full h-[calc(100vh-80px)] flex items-center justify-center">
       <div className="w-[80%] flex flex-col items-center justify-center 900px:flex-row ">
         <div >
           <img
