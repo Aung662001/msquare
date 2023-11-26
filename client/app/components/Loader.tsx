@@ -10,24 +10,10 @@ type Props = {
 }
 
 const Loader:FC<Props> = () => {
-
   return (
-    <div style={{ position: 'relative' }} className={`w-full h-full flex items-center justify-center`}>
-    <CircularProgress
-      variant="indeterminate"
-      disableShrink
-      sx={{
-        color: (theme) => (theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8'),
-        animationDuration: '550ms',
-        position: 'absolute',
-        [`& .${circularProgressClasses.circle}`]: {
-          strokeLinecap: 'round',
-        },
-      }}
-      size={40}
-      thickness={4}
-    />
-  </div>
+    <div style={{ position: 'relative' }} className={`w-full h-[calc(100vh-80px)] flex items-center justify-center`}>
+      <div className={`loader`}></div>
+   </div>
   )
 }
 

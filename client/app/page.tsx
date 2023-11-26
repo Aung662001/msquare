@@ -14,6 +14,7 @@ const Page: FC<Props> = (props) => {
   const {user } = useSelector((state:any)=>(state.auth))
   const [open, setOpen] = useState(false);
   const [activeNumber, setActiveNumber] = useState(0);
+
   return (
      <div>
       <Heading
@@ -21,7 +22,7 @@ const Page: FC<Props> = (props) => {
         description="You want, you try"
         keywords="learning,programming,msquare,react,nextjs,mysql"
       />
-        <Header open={open} setOpen={setOpen} activeNumber={activeNumber} setActiveNumber={setActiveNumber}/>
+      <Header open={open} setOpen={setOpen} activeNumber={activeNumber} setActiveNumber={setActiveNumber}/>
       <Custom>
         <Hero />
       </Custom>
@@ -29,18 +30,11 @@ const Page: FC<Props> = (props) => {
   );
 };
 const Custom: FC<{ children: ReactNode }> = ({ children }) => {
-  const [mounted,setMounted] = useState(false)
   const { isLoading } = useLoadUserQuery({});
-  useEffect(()=>{
-    setMounted(true)
-  },[])
-  if(!mounted ){
-    return <>
-    </>;
-  }
+
   return (
     <div className={`dark:bg-black w-screen`}>
-      {(isLoading ) ? <Loader/> : <>{children}</>}
+      { (isLoading ) ?<Loader/> : <>{children}</>}
     </div>
   );
 };
