@@ -3,7 +3,7 @@ import React,{useState} from "react";
 import Heading from "../utils/Heading";
  import AdminSidebar from "../components/admin/sidebar/AdminSidebar";
 import AdminProtected from "../hooks/useAdmin";
-
+import Hero from "./Hero"
 type Props = {};
 
 const page = (props: Props) => {
@@ -16,11 +16,13 @@ const page = (props: Props) => {
             description="Manage courses, manage students"
             keywords="learning,programming,msquare,react,nextjs,mysql"
             />
-        <div className="flex h-[100vh]">
+        <div className="flex h-[200vh]">
             <div className="1500px:w-[18%] w-1/5">
                 <AdminSidebar />
             </div>
-            <div className="w-[80%]"></div>
+            <div className="w-[80%]">
+              <Hero/>
+            </div>
         </div>
       </AdminProtected>
     </div>

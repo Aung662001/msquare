@@ -19,12 +19,12 @@ import {
   ArrowForwardIos,
   HomeOutlined,
 } from "./Icon";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import {  Box, IconButton, Typography } from "@mui/material";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import { useLogoutQuery } from "@/redux/features/auth/authApiSlice";
 
 type Props = {
   title: string;
@@ -55,12 +55,14 @@ const SideBar = () => {
   const [selected, setSelected] = useState("Dashboard");
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  useLogoutQuery(undefined,{skip:!logout})
 
   useEffect(() => {
     setMounted(true)
     document.documentElement.clientWidth < 900 && setIsCollapsed(true) 
   }, []);
   if (!mounted) return null;
+
   const logoutHandler = () => setLogout(true);
   
   return (
@@ -141,7 +143,7 @@ const SideBar = () => {
                   width={100}
                   height={100}
                   src={
-                    user?.avatar ? user.avatar.url : "../../Route/msquare.jpg"
+                    user?.avatar ? user.avatar.url : "/../../Route/msquare.jpg"
                   }
                   style={{
                     cursor: "pointer",
@@ -316,8 +318,8 @@ const SideBar = () => {
             />
             <div onClick={logoutHandler}>
               <Item
-              hoverText={!isCollapsed ?"":"Home"}
-              title={isCollapsed ?"":"Home"}
+              hoverText={!isCollapsed ?"":"Logout"}
+              title={isCollapsed ?"":"Logout"}
                 to="/"
                 icon={<ExitToApp />}
                 selected={selected}
