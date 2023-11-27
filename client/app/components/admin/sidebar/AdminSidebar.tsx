@@ -25,6 +25,8 @@ import {  Box, IconButton, Typography } from "@mui/material";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { useLogoutQuery } from "@/redux/features/auth/authApiSlice";
+import { redirect } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 type Props = {
   title: string;
@@ -56,14 +58,17 @@ const SideBar = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   useLogoutQuery(undefined,{skip:!logout})
-
+  
   useEffect(() => {
     setMounted(true)
     document.documentElement.clientWidth < 900 && setIsCollapsed(true) 
   }, []);
   if (!mounted) return null;
 
-  const logoutHandler = () => setLogout(true);
+  const logoutHandler = () =>{
+    setLogout(true);
+    signOut();
+  } 
   
   return (
     <Box

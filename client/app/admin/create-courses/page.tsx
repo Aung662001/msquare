@@ -19,7 +19,7 @@ const page = (props: Props) => {
         <AdminSidebar/>
       </div>
       <Header/>
-      <div className=''>
+      <div className='w-[80%] float-right mt-10'>
         <CreateCourses/>
       </div>
     </div>

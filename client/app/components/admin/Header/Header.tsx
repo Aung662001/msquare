@@ -18,7 +18,7 @@ const Header = ({}: Props) => {
           <NotificationsOutlined onClick={() => setOpen(!open)} className="dark:text-white text-black text-[30px]"/>
         </div>
       </div>
-      {!open && (
+      {open && (
         <div className="w-96 fixed  top-14 right-7 dark:text-white text-black  dark:bg-[#111C43] bg-gray-100 p-3 rounded-sm overflow-y-scroll max-h-[500px]">
           <h2 className="text-[1.5rem] font-bold text-center">Notifications</h2>
             <div className="border-gray-100 border-l-0 border-r-0 border-b-0 border mb-2">
