@@ -57,7 +57,7 @@ const SideBar = () => {
   const [selected, setSelected] = useState("Dashboard");
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
-  useLogoutQuery(undefined,{skip:!logout})
+  // useLogoutQuery(undefined,{skip:!logout})
   
   useEffect(() => {
     setMounted(true)
@@ -67,7 +67,7 @@ const SideBar = () => {
 
   const logoutHandler = () =>{
     setLogout(true);
-    signOut();
+    // signOut();
   } 
   
   return (
