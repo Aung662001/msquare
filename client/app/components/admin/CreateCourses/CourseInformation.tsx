@@ -57,7 +57,7 @@ const CourseInformation: FC<Props> = ({
     }
   }
   function submitHandler(){
-    setActive(active++);
+    setActive(active+1);
   }
   return (
     <div>

@@ -1,6 +1,7 @@
 import mongoose, { Document, Model, Mongoose, Schema } from "mongoose";
 import { Iduser } from "./user.model";
-
+//course > course descirption + course data 
+//course data > 
 interface IComment {
   user: Iduser;
   question: string;

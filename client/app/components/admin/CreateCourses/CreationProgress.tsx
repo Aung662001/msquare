@@ -16,7 +16,6 @@ const CreationProgress: FC<Props> = ({ active, setActive }) => {
   return (
     <div className="fixed -z-40">
       {progerss.map((item, index) => {
-        console.log(index,active,"hahah")
         return (
           <div className="flex flex-col" key={index}>
             <div className="flex ">
