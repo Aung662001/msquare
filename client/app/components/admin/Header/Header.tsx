@@ -24,7 +24,7 @@ const Header = ({}: Props) => {
             <div className="border-gray-100 border-l-0 border-r-0 border-b-0 border mb-2">
             <div className="flex gap-5 mb-3">
               <p className="font-bold">New Notification Received</p>
-              <p>Mark as read</p>
+              <p className='cursor-pointer'>Mark as read</p>
             </div>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
@@ -37,7 +37,7 @@ const Header = ({}: Props) => {
           <div className="border-gray-100 border-l-0 border-r-0 border-b-0 border mb-2">
             <div className="flex gap-5 mb-3">
               <p className="font-bold">New Notification Received</p>
-              <p>Mark as read</p>
+              <p className='cursor-pointer'>Mark as read</p>
             </div>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
@@ -50,7 +50,7 @@ const Header = ({}: Props) => {
           <div className="border-gray-100 border-l-0 border-r-0 border-b-0 border mb-2">
             <div className="flex gap-5 mb-3">
               <p className="font-bold">New Notification Received</p>
-              <p>Mark as read</p>
+              <p className='cursor-pointer'>Mark as read</p>
             </div>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
@@ -63,7 +63,7 @@ const Header = ({}: Props) => {
           <div className="border-gray-100 border-l-0 border-r-0 border-b-0 border mb-2">
             <div className="flex gap-5 mb-3">
               <p className="font-bold">New Notification Received</p>
-              <p>Mark as read</p>
+              <p className='cursor-pointer'>Mark as read</p>
             </div>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
@@ -76,7 +76,7 @@ const Header = ({}: Props) => {
           <div className="border-gray-100 border-l-0 border-r-0 border-b-0 border mb-2">
             <div className="flex gap-5 mb-3">
               <p className="font-bold">New Notification Received</p>
-              <p>Mark as read</p>
+              <p className='cursor-pointer'>Mark as read</p>
             </div>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
@@ -89,7 +89,7 @@ const Header = ({}: Props) => {
           <div className="border-gray-100 border-l-0 border-r-0 border-b-0 border mb-2">
             <div className="flex gap-5 mb-3">
               <p className="font-bold">New Notification Received</p>
-              <p>Mark as read</p>
+              <p className='cursor-pointer'>Mark as read</p>
             </div>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate

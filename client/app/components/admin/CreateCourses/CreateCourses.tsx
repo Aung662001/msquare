@@ -3,9 +3,10 @@ import CourseInformation from "./CourseInformation";
 import React, { useState } from "react";
 import CreationProgress from "./CreationProgress";
 import CourseData from "./CourseData";
+import MainCourseData from "./MainCourseData"
 type Props = {};
 const CreateCourses = (props: Props) => {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(2);
   const [courseInformation, setCourseInformation] = useState({
     name: "",
     description: "",
@@ -18,7 +19,7 @@ const CreateCourses = (props: Props) => {
   });
   const [benefits, setBenefits] = useState([{ title: "" }]);
   const [prerequisites, setPrerequisites] = useState([{ title: "" }]);
-  const [mainCourseData, setMainCourseData] = useState({
+  const [mainCourseData, setMainCourseData] = useState([{
     title: "",
     description: "",
     videoUrl: "",
@@ -26,8 +27,11 @@ const CreateCourses = (props: Props) => {
     videoSection: "Untitled section",
     links: [{ title: "", url: "" }],
     suggection: "",
-  });
+  }]);
   const [courseData, setCourseData] = useState({});
+  function handleSubmit(){
+
+  }
   return (
     <div className="flex  w-[90%]">
       {active === 0 && (
@@ -49,6 +53,17 @@ const CreateCourses = (props: Props) => {
             setPrerequisites = {setPrerequisites}
             active={active}
             setActive={setActive}
+          />
+        </div>
+      )}
+       {active === 2 && (
+        <div className="w-[80%]">
+          <MainCourseData
+            active={active}
+            setActive={setActive}
+            mainCourseData = {mainCourseData}
+            setMainCourseData = {setMainCourseData}
+            handleSubmit={handleSubmit}
           />
         </div>
       )}

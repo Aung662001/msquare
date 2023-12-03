@@ -14,7 +14,7 @@ const page = (props: Props) => {
             description="Manage courses, manage students"
             keywords="learning,programming,msquare,react,nextjs,mysql"
             />
-    <div className='h-[200vh]'>
+    <div className='h-[100vh]'>
       <div className={` 1500px:w-[18%] w-1/5`}>
         <AdminSidebar/>
       </div>
